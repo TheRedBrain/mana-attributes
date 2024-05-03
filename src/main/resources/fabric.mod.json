@@ -1,41 +1,40 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
-	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"id": "manaattributes",
+	"version": "0.0.1-1.20.1",
+	"name": "Mana Attributes",
+	"description": "This mod adds mechanics which allow for a more RPG styled gameplay.",
 	"authors": [
-		"Me!"
+		"TheRedBrain"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/TheRedBrain/manaattributes"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+
+	"license": "MIT",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+          "com.github.theredbrain.manaattributes.ManaAttributes"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"com.github.theredbrain.manaattributes.ManaAttributesClient"
+		],
+		"modmenu": [
+			"com.github.theredbrain.manaattributes.compatibility.ModMenuCompatibility"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"manaattributes.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "manaattributes.client.mixins.json",
 			"environment": "client"
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.15.10",
-		"minecraft": "~1.20.5",
-		"java": ">=21",
+		"fabricloader": ">=0.14.20",
+		"minecraft": "1.20.1",
+		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }

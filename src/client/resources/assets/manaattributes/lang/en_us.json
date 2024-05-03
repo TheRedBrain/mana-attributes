@@ -1,0 +1,17 @@
+{
+	"attribute.name.generic.mana_regeneration": "Mana Regeneration",
+	"attribute.name.generic.max_mana": "Max Mana",
+	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
+	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
+
+	"effect.manaattributes.mana_regeneration_effect": "Mana Regeneration",
+	"effect.manaattributes.mana_regeneration_effect.description": "Your mana can regenerate.",
+
+	"text.autoconfig.manaattributes.title": "Mana Attributes",
+	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
+	"text.autoconfig.manaattributes.option.client.show_mana_bar_number": "Show numeric mana value",
+	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
+	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Offset from the bottom of the screen.",
+
+	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
+}

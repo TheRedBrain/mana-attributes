@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.github.theredbrain.manaattributes.mixin.client",
+	"compatibilityLevel": "JAVA_17",
+	"client": [
+		"gui.hud.InGameHudMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
