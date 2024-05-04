@@ -9,6 +9,7 @@
 
 	"text.autoconfig.manaattributes.title": "Mana Attributes",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
+	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar_number": "Show numeric mana value",
 	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
 	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Offset from the bottom of the screen.",

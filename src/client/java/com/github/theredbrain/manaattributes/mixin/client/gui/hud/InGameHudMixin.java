@@ -52,7 +52,7 @@ public abstract class InGameHudMixin {
                 int attributeBarNumberY;
                 int normalizedManaRatio = (int) (((double) mana / Math.max(maxMana, 1)) * 182);
 
-                if (maxMana > 0 && (normalizedManaRatio < 1 || clientConfig.show_full_mana_bar)) {
+                if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
                     this.client.getProfiler().push("mana_bar");
                     context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY - 18, 0, 10, 182, 5);
                     if (normalizedManaRatio > 0) {
