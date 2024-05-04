@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -28,7 +29,7 @@ loom {
     splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"manaattributes" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -79,6 +80,22 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = '1uXUV3Qn' // The ID of your Modrinth project. Slugs will not work.
+	versionNumber = mod_version
+	versionType = "release" // can also be "beta" or "alpha"
+	uploadFile = remapJar
+	gameVersions = ['1.20.1'] // An array of game versions the version supports
+	loaders = ['fabric']
+	dependencies = [
+			new ModDependency('P7dR8mSH', 'required'), // Fabric API
+			new ModDependency('9s6osm5g', 'required') // Cloth Config
+	]
+	changelog = "${update_changelog}"
 }
 
 // configure the maven publication

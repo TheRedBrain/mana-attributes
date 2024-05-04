@@ -1,9 +1,13 @@
-# Fabric Example Mod
+# Mana Attributes
+This API adds a mana system. 
 
-## Setup
+## Default implementation
+LivingEntities can have up to **_generic.max_mana_** amounts of mana. When mana is reduced, a cooldown of **_generic.mana_regeneration_delay_threshold_** ticks starts. After the cooldown ends **_generic.mana_regeneration_** is regenerated every **_generic.mana_tick_threshold_** ticks.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+## Customization
+When the gamerule "naturalManaRegeneration" is true, players have a mana regeneration of at least 1.
 
-## License
+The client config allows customizing the HUD element.
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+## API
+Casting a "LivingEntity" to the "ManaUsingEntity" interface gives access to all relevant methods.

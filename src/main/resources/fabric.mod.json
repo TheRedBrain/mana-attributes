@@ -1,14 +1,14 @@
 {
 	"schemaVersion": 1,
 	"id": "manaattributes",
-	"version": "0.0.1-1.20.1",
+	"version": "${version}",
 	"name": "Mana Attributes",
-	"description": "This mod adds mechanics which allow for a more RPG styled gameplay.",
+	"description": "A small API that adds a mana system controlled by entity attributes.",
 	"authors": [
 		"TheRedBrain"
 	],
 	"contact": {
-		"sources": "https://github.com/TheRedBrain/manaattributes"
+		"sources": "https://github.com/TheRedBrain/mana-attributes"
 	},
 
 	"license": "MIT",

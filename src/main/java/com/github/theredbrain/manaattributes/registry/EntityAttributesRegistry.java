@@ -11,7 +11,7 @@ public class EntityAttributesRegistry {
     public static final EntityAttribute MANA_REGENERATION = new ClampedEntityAttribute("attribute.name.generic.mana_regeneration", 0.0, -1024.0, 1024.0).setTracked(true);
     public static final EntityAttribute MAX_MANA = new ClampedEntityAttribute("attribute.name.generic.max_mana", 0.0, 0.0, 1024.0).setTracked(true);
     public static final EntityAttribute MANA_REGENERATION_DELAY_THRESHOLD = new ClampedEntityAttribute("attribute.name.generic.mana_regeneration_delay_threshold", 60.0, 0.0, 1024.0).setTracked(true);
-    public static final EntityAttribute MANA_TICK_THRESHOLD = new ClampedEntityAttribute("attribute.name.generic.mana_tick_threshold", 100.0, 0.0, 1024.0).setTracked(true);
+    public static final EntityAttribute MANA_TICK_THRESHOLD = new ClampedEntityAttribute("attribute.name.generic.mana_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true);
 
     public static void registerAttributes() {
 
