@@ -10,9 +10,14 @@
 	"text.autoconfig.manaattributes.title": "Mana Attributes",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
 	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
+	"text.autoconfig.manaattributes.option.client.dynamically_adjust_to_armor_bar": "Dynamically adjusts to the armor bar",
+	"text.autoconfig.manaattributes.option.client.mana_bar_additional_length": "Additional length of the mana bar",
+	"text.autoconfig.manaattributes.option.client.mana_bar_x_offset": "Mana bar x offset",
+	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Mana bar y offset",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar_number": "Show numeric mana value",
 	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
-	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Offset from the bottom of the screen.",
+	"text.autoconfig.manaattributes.option.client.mana_bar_number_x_offset": "Mana bar number x offset",
+	"text.autoconfig.manaattributes.option.client.mana_bar_number_y_offset": "Mana bar number y offset",
 
 	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
 }
