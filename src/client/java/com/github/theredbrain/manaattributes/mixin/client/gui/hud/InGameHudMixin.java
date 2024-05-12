@@ -1,6 +1,5 @@
 package com.github.theredbrain.manaattributes.mixin.client.gui.hud;
 
-import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.manaattributes.ManaAttributesClient;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import net.fabricmc.api.EnvType;
@@ -54,15 +53,15 @@ public abstract class InGameHudMixin {
 
                 if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
                     this.client.getProfiler().push("mana_bar");
-                    context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY - 18, 0, 10, 182, 5);
+                    context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 10, 182, 5);
                     if (normalizedManaRatio > 0) {
-                        context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY - 18, 0, 15, normalizedManaRatio, 5);
+                        context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, normalizedManaRatio, 5);
                     }
                     if (clientConfig.show_mana_bar_number) {
                         this.client.getProfiler().swap("mana_bar_number");
                         String string = String.valueOf(mana);
                         attributeBarNumberX = (this.scaledWidth - this.getTextRenderer().getWidth(string)) / 2;
-                        attributeBarNumberY = attributeBarY - 19;
+                        attributeBarNumberY = attributeBarY - 1;
                         context.drawText(this.getTextRenderer(), string, attributeBarNumberX + 1, attributeBarNumberY, 0, false);
                         context.drawText(this.getTextRenderer(), string, attributeBarNumberX - 1, attributeBarNumberY, 0, false);
                         context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY + 1, 0, false);
