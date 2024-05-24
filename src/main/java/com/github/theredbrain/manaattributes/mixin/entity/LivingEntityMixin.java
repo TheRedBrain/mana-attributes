@@ -1,7 +1,7 @@
 package com.github.theredbrain.manaattributes.mixin.entity;
 
+import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
-import com.github.theredbrain.manaattributes.registry.EntityAttributesRegistry;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -46,10 +46,10 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
     private static void manaattributes$createLivingAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.getReturnValue()
-                .add(EntityAttributesRegistry.MANA_REGENERATION)
-                .add(EntityAttributesRegistry.MAX_MANA)
-                .add(EntityAttributesRegistry.MANA_REGENERATION_DELAY_THRESHOLD)
-                .add(EntityAttributesRegistry.MANA_TICK_THRESHOLD)
+                .add(ManaAttributes.MANA_REGENERATION)
+                .add(ManaAttributes.MAX_MANA)
+                .add(ManaAttributes.MANA_REGENERATION_DELAY_THRESHOLD)
+                .add(ManaAttributes.MANA_TICK_THRESHOLD)
         ;
     }
 
@@ -100,12 +100,12 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
     @Override
     public int manaattributes$getManaRegenerationDelayThreshold() {
-        return (int) this.getAttributeValue(EntityAttributesRegistry.MANA_REGENERATION_DELAY_THRESHOLD);
+        return (int) this.getAttributeValue(ManaAttributes.MANA_REGENERATION_DELAY_THRESHOLD);
     }
 
     @Override
     public int manaattributes$getManaTickThreshold() {
-        return (int) this.getAttributeValue(EntityAttributesRegistry.MANA_TICK_THRESHOLD);
+        return (int) this.getAttributeValue(ManaAttributes.MANA_TICK_THRESHOLD);
     }
 
     @Override
@@ -115,12 +115,12 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
     @Override
     public float manaattributes$getManaRegeneration() {
-        return (float) this.getAttributeValue(EntityAttributesRegistry.MANA_REGENERATION);
+        return (float) this.getAttributeValue(ManaAttributes.MANA_REGENERATION);
     }
 
     @Override
     public float manaattributes$getMaxMana() {
-        return (float) this.getAttributeValue(EntityAttributesRegistry.MAX_MANA);
+        return (float) this.getAttributeValue(ManaAttributes.MAX_MANA);
     }
 
     @Override
