@@ -10,6 +10,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
@@ -21,8 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements ManaUsingEntity {
 
-    @Shadow
-    public abstract double getAttributeValue(EntityAttribute attribute);
+    @Shadow public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
 
     @Unique
     private int manaTickTimer = 0;
@@ -39,8 +39,8 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
     }
 
     @Inject(method = "initDataTracker", at = @At("RETURN"))
-    protected void manaattributes$initDataTracker(CallbackInfo ci) {
-        this.dataTracker.startTracking(MANA, 0.0F);
+    protected void manaattributes$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(MANA, 0.0F);
     }
 
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
