@@ -12,6 +12,7 @@
 	},
 
 	"license": "MIT",
+	"icon": "assets/manaattributes/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
