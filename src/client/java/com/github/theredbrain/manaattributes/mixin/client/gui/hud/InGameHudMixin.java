@@ -36,6 +36,15 @@ public abstract class InGameHudMixin {
     @Unique
     private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
 
+    @Unique
+    private int oldNormalizedManaRatio = -1;
+
+    @Unique
+    private int oldMaxMana = -1;
+
+    @Unique
+    private int manaBarAnimationCounter = 0;
+
     @Inject(method = "renderStatusBars", at = @At("RETURN"))
     private void manaattributes$renderStatusBars(DrawContext context, CallbackInfo ci) {
         var clientConfig = ManaAttributesClient.clientConfig;
@@ -52,6 +61,19 @@ public abstract class InGameHudMixin {
                 int attributeBarNumberY;
                 int normalizedManaRatio = (int) (((double) mana / Math.max(maxMana, 1)) * (5 + clientConfig.mana_bar_additional_length + 5));
 
+                if (this.oldMaxMana != maxMana) {
+                    this.oldMaxMana = maxMana;
+                    this.oldNormalizedManaRatio = normalizedManaRatio;
+                }
+
+                this.manaBarAnimationCounter = this.manaBarAnimationCounter + MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana());
+
+                if (this.oldNormalizedManaRatio != normalizedManaRatio && this.manaBarAnimationCounter > Math.max(0, clientConfig.mana_bar_animation_interval)) {
+                    boolean reduceOldRatio = this.oldNormalizedManaRatio > normalizedManaRatio;
+                    this.oldNormalizedManaRatio = this.oldNormalizedManaRatio + (reduceOldRatio ? -1 : 1);
+                    this.manaBarAnimationCounter = 0;
+                }
+
                 if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
                     this.client.getProfiler().push("mana_bar");
 
@@ -65,17 +87,27 @@ public abstract class InGameHudMixin {
                     context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 10, 5, 5, 256, 256);
 
                     // foreground
-                    if (normalizedManaRatio > 0) {
-                        context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, Math.min(5, normalizedManaRatio), 5, 256, 256);
-                        if (normalizedManaRatio > 5) {
+                    int displayRatio = clientConfig.enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedManaRatio;
+                    if (displayRatio > 0) {
+                        context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, Math.min(5, displayRatio), 5, 256, 256);
+                        if (displayRatio > 5) {
                             if (mana_bar_additional_length > 0) {
-                                for (int i = 5; i < Math.min(5 + mana_bar_additional_length, normalizedManaRatio); i++) {
+                                for (int i = 5; i < Math.min(5 + mana_bar_additional_length, displayRatio); i++) {
                                     context.drawTexture(BARS_TEXTURE, attributeBarX + i, attributeBarY, 5, 15, 1, 5, 256, 256);
                                 }
                             }
                         }
-                        if (normalizedManaRatio > (5 + mana_bar_additional_length)) {
-                            context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 15, Math.min(5, normalizedManaRatio - 5 - mana_bar_additional_length), 5, 256, 256);
+                        if (displayRatio > (5 + mana_bar_additional_length)) {
+                            context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 15, Math.min(5, displayRatio - 5 - mana_bar_additional_length), 5, 256, 256);
+                        }
+                    }
+
+                    // overlay
+                    if (clientConfig.enable_smooth_animation && clientConfig.show_current_value_overlay) {
+                        if (normalizedManaRatio > 0) {
+                            if (normalizedManaRatio > 2 && normalizedManaRatio < (5 + mana_bar_additional_length + 3)) {
+                                context.drawTexture(BARS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 116, 5, 3, 256, 256);
+                            }
                         }
                     }
 
