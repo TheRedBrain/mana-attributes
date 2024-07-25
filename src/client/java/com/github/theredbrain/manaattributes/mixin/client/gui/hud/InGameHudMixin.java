@@ -66,7 +66,7 @@ public abstract class InGameHudMixin {
                     this.oldNormalizedManaRatio = normalizedManaRatio;
                 }
 
-                this.manaBarAnimationCounter = this.manaBarAnimationCounter + MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana());
+                this.manaBarAnimationCounter = this.manaBarAnimationCounter + Math.max(1, MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana()));
 
                 if (this.oldNormalizedManaRatio != normalizedManaRatio && this.manaBarAnimationCounter > Math.max(0, clientConfig.mana_bar_animation_interval)) {
                     boolean reduceOldRatio = this.oldNormalizedManaRatio > normalizedManaRatio;
@@ -89,6 +89,7 @@ public abstract class InGameHudMixin {
                     // foreground
                     int displayRatio = clientConfig.enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedManaRatio;
                     if (displayRatio > 0) {
+                        this.client.getProfiler().swap("mana_bar_foreground");
                         context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, Math.min(5, displayRatio), 5, 256, 256);
                         if (displayRatio > 5) {
                             if (mana_bar_additional_length > 0) {
@@ -104,10 +105,9 @@ public abstract class InGameHudMixin {
 
                     // overlay
                     if (clientConfig.enable_smooth_animation && clientConfig.show_current_value_overlay) {
-                        if (normalizedManaRatio > 0) {
-                            if (normalizedManaRatio > 2 && normalizedManaRatio < (5 + mana_bar_additional_length + 3)) {
-                                context.drawTexture(BARS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 116, 5, 3, 256, 256);
-                            }
+                        if (mana > 0 && mana < maxMana) {
+                            this.client.getProfiler().swap("mana_bar_foreground");
+                            context.drawTexture(BARS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 116, 5, 3, 256, 256);
                         }
                     }
 
