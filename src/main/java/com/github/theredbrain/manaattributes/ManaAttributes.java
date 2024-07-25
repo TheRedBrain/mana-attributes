@@ -14,6 +14,7 @@ public class ManaAttributes implements ModInitializer {
 	public static EntityAttribute MANA_REGENERATION;
 	public static EntityAttribute MAX_MANA;
 	public static EntityAttribute MANA_REGENERATION_DELAY_THRESHOLD;
+	public static EntityAttribute DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD;
 	public static EntityAttribute MANA_TICK_THRESHOLD;
 	@Override
 	public void onInitialize() {
