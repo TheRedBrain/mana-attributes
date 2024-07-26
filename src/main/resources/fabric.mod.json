@@ -10,13 +10,12 @@
 	"contact": {
 		"sources": "https://github.com/TheRedBrain/mana-attributes"
 	},
-
 	"license": "MIT",
 	"icon": "assets/manaattributes/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "com.github.theredbrain.manaattributes.ManaAttributes"
+			"com.github.theredbrain.manaattributes.ManaAttributes"
 		],
 		"client": [
 			"com.github.theredbrain.manaattributes.ManaAttributesClient"

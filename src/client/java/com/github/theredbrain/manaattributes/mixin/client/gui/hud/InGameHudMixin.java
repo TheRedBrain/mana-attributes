@@ -23,109 +23,115 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
-    @Shadow protected abstract PlayerEntity getCameraPlayer();
+	@Shadow
+	protected abstract PlayerEntity getCameraPlayer();
 
-    @Shadow private int scaledWidth;
+	@Shadow
+	private int scaledWidth;
 
-    @Shadow private int scaledHeight;
+	@Shadow
+	private int scaledHeight;
 
-    @Shadow @Final private MinecraftClient client;
+	@Shadow
+	@Final
+	private MinecraftClient client;
 
-    @Shadow public abstract TextRenderer getTextRenderer();
+	@Shadow
+	public abstract TextRenderer getTextRenderer();
 
-    @Unique
-    private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
+	@Unique
+	private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
 
-    @Unique
-    private int oldNormalizedManaRatio = -1;
+	@Unique
+	private int oldNormalizedManaRatio = -1;
 
-    @Unique
-    private int oldMaxMana = -1;
+	@Unique
+	private int oldMaxMana = -1;
 
-    @Unique
-    private int manaBarAnimationCounter = 0;
+	@Unique
+	private int manaBarAnimationCounter = 0;
 
-    @Inject(method = "renderStatusBars", at = @At("RETURN"))
-    private void manaattributes$renderStatusBars(DrawContext context, CallbackInfo ci) {
-        var clientConfig = ManaAttributesClient.clientConfig;
-        if (clientConfig.show_mana_bar) {
-            PlayerEntity playerEntity = this.getCameraPlayer();
-            if (playerEntity != null) {
-                int mana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMana());
-                int maxMana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMaxMana());
+	@Inject(method = "renderStatusBars", at = @At("RETURN"))
+	private void manaattributes$renderStatusBars(DrawContext context, CallbackInfo ci) {
+		var clientConfig = ManaAttributesClient.clientConfig;
+		if (clientConfig.show_mana_bar) {
+			PlayerEntity playerEntity = this.getCameraPlayer();
+			if (playerEntity != null) {
+				int mana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMana());
+				int maxMana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMaxMana());
 
-                int attributeBarX = this.scaledWidth / 2 + clientConfig.mana_bar_x_offset;
-                int attributeBarY = this.scaledHeight + clientConfig.mana_bar_y_offset - (clientConfig.dynamically_adjust_to_armor_bar && playerEntity.getArmor() > 0 ? 10 : 0);
-                int mana_bar_additional_length = clientConfig.mana_bar_additional_length;
-                int attributeBarNumberX;
-                int attributeBarNumberY;
-                int normalizedManaRatio = (int) (((double) mana / Math.max(maxMana, 1)) * (5 + clientConfig.mana_bar_additional_length + 5));
+				int attributeBarX = this.scaledWidth / 2 + clientConfig.mana_bar_x_offset;
+				int attributeBarY = this.scaledHeight + clientConfig.mana_bar_y_offset - (clientConfig.dynamically_adjust_to_armor_bar && playerEntity.getArmor() > 0 ? 10 : 0);
+				int mana_bar_additional_length = clientConfig.mana_bar_additional_length;
+				int attributeBarNumberX;
+				int attributeBarNumberY;
+				int normalizedManaRatio = (int) (((double) mana / Math.max(maxMana, 1)) * (5 + clientConfig.mana_bar_additional_length + 5));
 
-                if (this.oldMaxMana != maxMana) {
-                    this.oldMaxMana = maxMana;
-                    this.oldNormalizedManaRatio = normalizedManaRatio;
-                }
+				if (this.oldMaxMana != maxMana) {
+					this.oldMaxMana = maxMana;
+					this.oldNormalizedManaRatio = normalizedManaRatio;
+				}
 
-                this.manaBarAnimationCounter = this.manaBarAnimationCounter + Math.max(1, MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana()));
+				this.manaBarAnimationCounter = this.manaBarAnimationCounter + Math.max(1, MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana()));
 
-                if (this.oldNormalizedManaRatio != normalizedManaRatio && this.manaBarAnimationCounter > Math.max(0, clientConfig.mana_bar_animation_interval)) {
-                    boolean reduceOldRatio = this.oldNormalizedManaRatio > normalizedManaRatio;
-                    this.oldNormalizedManaRatio = this.oldNormalizedManaRatio + (reduceOldRatio ? -1 : 1);
-                    this.manaBarAnimationCounter = 0;
-                }
+				if (this.oldNormalizedManaRatio != normalizedManaRatio && this.manaBarAnimationCounter > Math.max(0, clientConfig.mana_bar_animation_interval)) {
+					boolean reduceOldRatio = this.oldNormalizedManaRatio > normalizedManaRatio;
+					this.oldNormalizedManaRatio = this.oldNormalizedManaRatio + (reduceOldRatio ? -1 : 1);
+					this.manaBarAnimationCounter = 0;
+				}
 
-                if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
-                    this.client.getProfiler().push("mana_bar");
+				if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
+					this.client.getProfiler().push("mana_bar");
 
-                    // background
-                    context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 10, 5, 5, 256, 256);
-                    if (mana_bar_additional_length > 0) {
-                        for (int i = 0; i < mana_bar_additional_length; i++) {
-                            context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + i, attributeBarY, 5, 10, 1, 5, 256, 256);
-                        }
-                    }
-                    context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 10, 5, 5, 256, 256);
+					// background
+					context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 10, 5, 5, 256, 256);
+					if (mana_bar_additional_length > 0) {
+						for (int i = 0; i < mana_bar_additional_length; i++) {
+							context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + i, attributeBarY, 5, 10, 1, 5, 256, 256);
+						}
+					}
+					context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 10, 5, 5, 256, 256);
 
-                    // foreground
-                    int displayRatio = clientConfig.enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedManaRatio;
-                    if (displayRatio > 0) {
-                        this.client.getProfiler().swap("mana_bar_foreground");
-                        context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, Math.min(5, displayRatio), 5, 256, 256);
-                        if (displayRatio > 5) {
-                            if (mana_bar_additional_length > 0) {
-                                for (int i = 5; i < Math.min(5 + mana_bar_additional_length, displayRatio); i++) {
-                                    context.drawTexture(BARS_TEXTURE, attributeBarX + i, attributeBarY, 5, 15, 1, 5, 256, 256);
-                                }
-                            }
-                        }
-                        if (displayRatio > (5 + mana_bar_additional_length)) {
-                            context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 15, Math.min(5, displayRatio - 5 - mana_bar_additional_length), 5, 256, 256);
-                        }
-                    }
+					// foreground
+					int displayRatio = clientConfig.enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedManaRatio;
+					if (displayRatio > 0) {
+						this.client.getProfiler().swap("mana_bar_foreground");
+						context.drawTexture(BARS_TEXTURE, attributeBarX, attributeBarY, 0, 15, Math.min(5, displayRatio), 5, 256, 256);
+						if (displayRatio > 5) {
+							if (mana_bar_additional_length > 0) {
+								for (int i = 5; i < Math.min(5 + mana_bar_additional_length, displayRatio); i++) {
+									context.drawTexture(BARS_TEXTURE, attributeBarX + i, attributeBarY, 5, 15, 1, 5, 256, 256);
+								}
+							}
+						}
+						if (displayRatio > (5 + mana_bar_additional_length)) {
+							context.drawTexture(BARS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 15, Math.min(5, displayRatio - 5 - mana_bar_additional_length), 5, 256, 256);
+						}
+					}
 
-                    // overlay
-                    if (clientConfig.enable_smooth_animation && clientConfig.show_current_value_overlay) {
-                        if (mana > 0 && mana < maxMana) {
-                            this.client.getProfiler().swap("mana_bar_foreground");
-                            context.drawTexture(BARS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 116, 5, 3, 256, 256);
-                        }
-                    }
+					// overlay
+					if (clientConfig.enable_smooth_animation && clientConfig.show_current_value_overlay) {
+						if (mana > 0 && mana < maxMana) {
+							this.client.getProfiler().swap("mana_bar_foreground");
+							context.drawTexture(BARS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 116, 5, 3, 256, 256);
+						}
+					}
 
-                    if (clientConfig.show_mana_bar_number) {
-                        this.client.getProfiler().swap("mana_bar_number");
-                        String string = String.valueOf(mana);
-                        attributeBarNumberX = (this.scaledWidth - this.getTextRenderer().getWidth(string)) / 2 + clientConfig.mana_bar_number_x_offset;
-                        attributeBarNumberY = this.scaledHeight + clientConfig.mana_bar_number_y_offset - (clientConfig.dynamically_adjust_to_armor_bar && playerEntity.getArmor() > 0 ? 10 : 0);
-                        context.drawText(this.getTextRenderer(), string, attributeBarNumberX + 1, attributeBarNumberY, 0, false);
-                        context.drawText(this.getTextRenderer(), string, attributeBarNumberX - 1, attributeBarNumberY, 0, false);
-                        context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY + 1, 0, false);
-                        context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY - 1, 0, false);
-                        context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY, clientConfig.mana_bar_number_color, true);
-                    }
-                }
+					if (clientConfig.show_mana_bar_number) {
+						this.client.getProfiler().swap("mana_bar_number");
+						String string = String.valueOf(mana);
+						attributeBarNumberX = (this.scaledWidth - this.getTextRenderer().getWidth(string)) / 2 + clientConfig.mana_bar_number_x_offset;
+						attributeBarNumberY = this.scaledHeight + clientConfig.mana_bar_number_y_offset - (clientConfig.dynamically_adjust_to_armor_bar && playerEntity.getArmor() > 0 ? 10 : 0);
+						context.drawText(this.getTextRenderer(), string, attributeBarNumberX + 1, attributeBarNumberY, 0, false);
+						context.drawText(this.getTextRenderer(), string, attributeBarNumberX - 1, attributeBarNumberY, 0, false);
+						context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY + 1, 0, false);
+						context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY - 1, 0, false);
+						context.drawText(this.getTextRenderer(), string, attributeBarNumberX, attributeBarNumberY, clientConfig.mana_bar_number_color, true);
+					}
+				}
 
-                this.client.getProfiler().pop();
-            }
-        }
-    }
+				this.client.getProfiler().pop();
+			}
+		}
+	}
 }
