@@ -1,3 +1,9 @@
+# 2.1.0
+
+- added optional smooth mana bar animations
+- added a mana regeneration delay after mana is reduced, controlled by an entity attribute
+- added a missing translation key
+
 # 2.0.0
 
 Update to 1.21
