@@ -4,12 +4,9 @@
 	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
 	"attribute.name.generic.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
 	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
-
 	"effect.manaattributes.mana_regeneration_effect": "Mana Regeneration",
 	"effect.manaattributes.mana_regeneration_effect.description": "Your mana can regenerate.",
-
 	"hud.message.manaTooLow": "Your mana is too low!",
-
 	"text.autoconfig.manaattributes.title": "Mana Attributes",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
 	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
@@ -24,6 +21,5 @@
 	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
 	"text.autoconfig.manaattributes.option.client.mana_bar_number_x_offset": "Mana bar number x offset",
 	"text.autoconfig.manaattributes.option.client.mana_bar_number_y_offset": "Mana bar number y offset",
-
 	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
 }

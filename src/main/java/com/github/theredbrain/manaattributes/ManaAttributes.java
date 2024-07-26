@@ -17,6 +17,7 @@ public class ManaAttributes implements ModInitializer {
 	public static RegistryEntry<EntityAttribute> MANA_REGENERATION_DELAY_THRESHOLD;
 	public static RegistryEntry<EntityAttribute> DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD;
 	public static RegistryEntry<EntityAttribute> MANA_TICK_THRESHOLD;
+
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing mana!");

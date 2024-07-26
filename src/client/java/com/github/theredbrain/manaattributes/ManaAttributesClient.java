@@ -9,10 +9,11 @@ import net.fabricmc.api.ClientModInitializer;
 
 public class ManaAttributesClient implements ClientModInitializer {
 	public static ClientConfig clientConfig;
+
 	@Override
 	public void onInitializeClient() {
 		// Config
 		AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
-		clientConfig = ((ClientConfigWrapper)AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig()).client;
+		clientConfig = ((ClientConfigWrapper) AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig()).client;
 	}
 }
