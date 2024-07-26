@@ -7,6 +7,8 @@
 	"effect.manaattributes.mana_regeneration_effect": "Mana Regeneration",
 	"effect.manaattributes.mana_regeneration_effect.description": "Your mana can regenerate.",
 
+	"hud.message.manaTooLow": "Your mana is too low!",
+
 	"text.autoconfig.manaattributes.title": "Mana Attributes",
 	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
 	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
