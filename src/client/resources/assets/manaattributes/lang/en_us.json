@@ -2,6 +2,7 @@
 	"attribute.name.generic.mana_regeneration": "Mana Regeneration",
 	"attribute.name.generic.max_mana": "Max Mana",
 	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
+	"attribute.name.generic.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
 	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
 
 	"effect.manaattributes.mana_regeneration_effect": "Mana Regeneration",

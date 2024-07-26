@@ -27,6 +27,8 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
     @Unique
     private int manaTickTimer = 0;
     @Unique
+    private int depletedManaRegenerationDelayTimer = 0;
+    @Unique
     private int manaRegenerationDelayTimer = 0;
     @Unique
     private boolean delayManaRegeneration = false;
@@ -49,6 +51,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
                 .add(ManaAttributes.MANA_REGENERATION)
                 .add(ManaAttributes.MAX_MANA)
                 .add(ManaAttributes.MANA_REGENERATION_DELAY_THRESHOLD)
+                .add(ManaAttributes.DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD)
                 .add(ManaAttributes.MANA_TICK_THRESHOLD)
         ;
     }
@@ -76,17 +79,25 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
             this.manaTickTimer++;
 
             if (this.manaattributes$getMana() <= 0 && this.delayManaRegeneration) {
-                this.manaRegenerationDelayTimer = 0;
+                this.depletedManaRegenerationDelayTimer = 0;
+                this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayThreshold();
                 this.delayManaRegeneration = false;
             }
             if (this.manaattributes$getMana() > 0 && !this.delayManaRegeneration) {
                 this.delayManaRegeneration = true;
             }
+            if (this.depletedManaRegenerationDelayTimer <= this.manaattributes$getDepletedManaRegenerationDelayThreshold()) {
+                this.depletedManaRegenerationDelayTimer++;
+            }
             if (this.manaRegenerationDelayTimer <= this.manaattributes$getManaRegenerationDelayThreshold()) {
                 this.manaRegenerationDelayTimer++;
             }
 
-            if (this.manaTickTimer >= this.manaattributes$getManaTickThreshold() && this.manaRegenerationDelayTimer >= this.manaattributes$getManaRegenerationDelayThreshold()) {
+            if (
+                    this.manaTickTimer >= this.manaattributes$getManaTickThreshold()
+                    && this.manaRegenerationDelayTimer >= this.manaattributes$getManaRegenerationDelayThreshold()
+                    && this.depletedManaRegenerationDelayTimer >= this.manaattributes$getDepletedManaRegenerationDelayThreshold()
+            ) {
                 if (this.manaattributes$getMana() < this.manaattributes$getMaxMana()) {
                     ((ManaUsingEntity) this).manaattributes$addMana(this.manaattributes$getRegeneratedMana());
                 } else if (this.manaattributes$getMana() > this.manaattributes$getMaxMana()) {
@@ -96,6 +107,11 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
             }
 
         }
+    }
+
+    @Override
+    public int manaattributes$getDepletedManaRegenerationDelayThreshold() {
+        return (int) this.getAttributeValue(ManaAttributes.DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD);
     }
 
     @Override
