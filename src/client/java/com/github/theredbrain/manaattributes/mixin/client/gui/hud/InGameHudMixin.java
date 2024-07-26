@@ -35,6 +35,18 @@ public abstract class InGameHudMixin {
     @Unique
     private static final Identifier BOSS_BAR_BLUE_BACKGROUND_TEXTURE = Identifier.ofVanilla("textures/gui/sprites/boss_bar/blue_background.png");
 
+    @Unique
+    private static final Identifier NOTCHED_20_PROGRESS_TEXTURE = Identifier.ofVanilla("textures/gui/sprites/boss_bar/notched_20_progress.png");
+
+    @Unique
+    private int oldNormalizedManaRatio = -1;
+
+    @Unique
+    private int oldMaxMana = -1;
+
+    @Unique
+    private int manaBarAnimationCounter = 0;
+
     @Inject(method = "renderStatusBars", at = @At("RETURN"))
     private void manaattributes$renderStatusBars(DrawContext context, CallbackInfo ci) {
         var clientConfig = ManaAttributesClient.clientConfig;
@@ -51,6 +63,19 @@ public abstract class InGameHudMixin {
                 int attributeBarNumberY;
                 int normalizedManaRatio = (int) (((double) mana / Math.max(maxMana, 1)) * (5 + clientConfig.mana_bar_additional_length + 5));
 
+                if (this.oldMaxMana != maxMana) {
+                    this.oldMaxMana = maxMana;
+                    this.oldNormalizedManaRatio = normalizedManaRatio;
+                }
+
+                this.manaBarAnimationCounter = this.manaBarAnimationCounter + Math.max(1, MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana()));
+
+                if (this.oldNormalizedManaRatio != normalizedManaRatio && this.manaBarAnimationCounter > Math.max(0, clientConfig.mana_bar_animation_interval)) {
+                    boolean reduceOldRatio = this.oldNormalizedManaRatio > normalizedManaRatio;
+                    this.oldNormalizedManaRatio = this.oldNormalizedManaRatio + (reduceOldRatio ? -1 : 1);
+                    this.manaBarAnimationCounter = 0;
+                }
+
                 if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
                     this.client.getProfiler().push("mana_bar");
 
@@ -64,17 +89,26 @@ public abstract class InGameHudMixin {
                     context.drawTexture(BOSS_BAR_BLUE_BACKGROUND_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 0, 5, 5, 182, 5);
 
                     // foreground
-                    if (normalizedManaRatio > 0) {
-                        context.drawTexture(BOSS_BAR_BLUE_PROGRESS_TEXTURE, attributeBarX, attributeBarY, 0, 0, Math.min(5, normalizedManaRatio), 5, 182, 5);
-                        if (normalizedManaRatio > 5) {
+                    int displayRatio = clientConfig.enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedManaRatio;
+                    if (displayRatio > 0) {
+                        context.drawTexture(BOSS_BAR_BLUE_PROGRESS_TEXTURE, attributeBarX, attributeBarY, 0, 0, Math.min(5, displayRatio), 5, 182, 5);
+                        if (displayRatio > 5) {
                             if (mana_bar_additional_length > 0) {
-                                for (int i = 5; i < Math.min(5 + mana_bar_additional_length, normalizedManaRatio); i++) {
+                                for (int i = 5; i < Math.min(5 + mana_bar_additional_length, displayRatio); i++) {
                                     context.drawTexture(BOSS_BAR_BLUE_PROGRESS_TEXTURE, attributeBarX + i, attributeBarY, 5, 0, 1, 5, 182, 5);
                                 }
                             }
                         }
-                        if (normalizedManaRatio > (5 + mana_bar_additional_length)) {
-                            context.drawTexture(BOSS_BAR_BLUE_PROGRESS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 0, Math.min(5, normalizedManaRatio - 5 - mana_bar_additional_length), 5, 182, 5);
+                        if (displayRatio > (5 + mana_bar_additional_length)) {
+                            context.drawTexture(BOSS_BAR_BLUE_PROGRESS_TEXTURE, attributeBarX + 5 + mana_bar_additional_length, attributeBarY, 177, 0, Math.min(5, displayRatio - 5 - mana_bar_additional_length), 5, 182, 5);
+                        }
+                    }
+
+                    // overlay
+                    if (clientConfig.enable_smooth_animation && clientConfig.show_current_value_overlay) {
+                        if (mana > 0 && mana < maxMana) {
+                            this.client.getProfiler().swap("mana_bar_overlay");
+                            context.drawTexture(NOTCHED_20_PROGRESS_TEXTURE, attributeBarX + normalizedManaRatio - 2, attributeBarY + 1, 7, 1, 5, 3, 182, 5);
                         }
                     }
 
