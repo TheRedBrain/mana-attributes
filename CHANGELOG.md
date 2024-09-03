@@ -1,3 +1,8 @@
+# 2.2.0
+
+- update to 1.21.1
+- improved mana bar customization
+
 # 2.1.0
 
 - added optional smooth mana bar animations
