@@ -70,22 +70,19 @@ public abstract class InGameHudMixin {
 		int mana = MathHelper.ceil(((ManaUsingEntity) player).manaattributes$getMana());
 		int maxMana = MathHelper.ceil(((ManaUsingEntity) player).manaattributes$getMaxMana());
 
-		int manaBarX = context.getScaledWindowWidth() / 2 + clientConfig.x_offset;
-		int manaBarY = context.getScaledWindowHeight() + clientConfig.y_offset;
-		String manaBarNumberString = String.valueOf(mana);
-		int manaBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(manaBarNumberString)) / 2 + clientConfig.number_x_offset + (clientConfig.dynamically_adjust_to_armor_bar && player.getArmor() > 0 ? 10 : 0);
-		int manaBarNumberY = context.getScaledWindowHeight() / 2 + clientConfig.number_y_offset;
-
 		if (maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar)) {
 
-			this.client.getProfiler().push("mana");
-			this.manaAttributes$drawEffectBuildUpElement(
+			this.manaAttributes$drawResourceBar(
 					context,
+					"mana",
+					"mana_number",
 					mana,
 					maxMana,
 					MathHelper.ceil(((ManaUsingEntity) player).manaattributes$getRegeneratedMana()),
-					manaBarX,
-					manaBarY,
+					clientConfig.origin,
+					clientConfig.offset_x,
+					clientConfig.offset_y - (clientConfig.dynamically_adjust_to_armor_bar ? 10 : 0),
+					MANA_TEXTURES,
 					clientConfig.fill_direction,
 					clientConfig.background_middle_segment_amount,
 					clientConfig.horizontal_background_left_end_width,
@@ -115,31 +112,29 @@ public abstract class InGameHudMixin {
 					clientConfig.vertical_overlay_width,
 					clientConfig.vertical_overlay_height,
 					clientConfig.enable_smooth_animation,
-					clientConfig.animation_interval
+					clientConfig.animation_interval,
+					clientConfig.max_value_change_is_animated,
+					clientConfig.show_number,
+					clientConfig.show_max_value,
+					clientConfig.number_offset_x,
+					clientConfig.number_offset_y - (clientConfig.dynamically_adjust_to_armor_bar ? 10 : 0),
+					clientConfig.number_color
 			);
-
-			if (clientConfig.show_number) {
-				this.client.getProfiler().swap("mana_number");
-				this.manaAttributes$drawEffectBuildUpNumber(
-						context,
-						manaBarNumberString,
-						manaBarNumberX,
-						manaBarNumberY,
-						clientConfig.number_color
-				);
-			}
-			this.client.getProfiler().pop();
 		}
 	}
 
 	@Unique
-	private void manaAttributes$drawEffectBuildUpElement(
+	private void manaAttributes$drawResourceBar(
 			DrawContext context,
+			String element_profiler_location,
+			String number_profiler_location,
 			int current_build_up,
 			int max_build_up,
 			int build_up_reduction,
-			int build_up_element_x,
-			int build_up_element_y,
+			ClientConfig.Origin origin,
+			int element_offset_x,
+			int element_offset_y,
+			Identifier[] texture_ids,
 			ClientConfig.FillDirection fill_direction,
 			int background_additional_middle_segment_amount,
 			int horizontal_background_left_end_width,
@@ -169,10 +164,15 @@ public abstract class InGameHudMixin {
 			int vertical_overlay_width,
 			int vertical_overlay_height,
 			boolean enable_smooth_animation,
-			int animation_interval
+			int animation_interval,
+			boolean max_value_change_is_animated,
+			boolean show_number,
+			boolean show_max_value,
+			int number_offset_x,
+			int number_offset_y,
+			int build_up_bar_number_color
 	) {
 
-//		int backgroundBarLength;
 		int progressBarLength;
 		int backgroundTextureHeight;
 		int backgroundTextureWidth;
@@ -180,6 +180,38 @@ public abstract class InGameHudMixin {
 		int progressTextureHeight;
 		int progressTextureWidth;
 		int progressMiddleSectionLength;
+		int originX;
+		int originY;
+		if (origin == ClientConfig.Origin.TOP_MIDDLE) {
+			originX = context.getScaledWindowWidth() / 2;
+			originY = 0;
+		} else if (origin == ClientConfig.Origin.TOP_RIGHT) {
+			originX = context.getScaledWindowWidth();
+			originY = 0;
+		} else if (origin == ClientConfig.Origin.MIDDLE_LEFT) {
+			originX = 0;
+			originY = context.getScaledWindowHeight() / 2;
+		} else if (origin == ClientConfig.Origin.MIDDLE_MIDDLE) {
+			originX = context.getScaledWindowWidth() / 2;
+			originY = context.getScaledWindowHeight() / 2;
+		} else if (origin == ClientConfig.Origin.MIDDLE_RIGHT) {
+			originX = context.getScaledWindowWidth();
+			originY = context.getScaledWindowHeight() / 2;
+		} else if (origin == ClientConfig.Origin.BOTTOM_LEFT) {
+			originX = 0;
+			originY = context.getScaledWindowHeight();
+		} else if (origin == ClientConfig.Origin.BOTTOM_MIDDLE) {
+			originX = context.getScaledWindowWidth() / 2;
+			originY = context.getScaledWindowHeight();
+		} else if (origin == ClientConfig.Origin.BOTTOM_RIGHT) {
+			originX = context.getScaledWindowWidth();
+			originY = context.getScaledWindowHeight();
+		} else {
+			originX = 0;
+			originY = 0;
+		}
+		int elementX = originX + element_offset_x;
+		int elementY = originY + element_offset_y;
 
 		// region variable calculation
 		if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP || fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
@@ -189,7 +221,6 @@ public abstract class InGameHudMixin {
 			progressTextureWidth = vertical_progress_width;
 			backgroundMiddleSectionLength = background_additional_middle_segment_amount * vertical_background_middle_segment_height;
 			progressMiddleSectionLength = progress_additional_middle_segment_amount * vertical_progress_middle_segment_height;
-//			backgroundBarLength = vertical_background_top_end_height + backgroundMiddleSectionLength + vertical_background_bottom_end_height;
 			progressBarLength = vertical_progress_top_end_height + progressMiddleSectionLength + vertical_progress_bottom_end_height;
 		} else {
 			backgroundTextureHeight = horizontal_background_height;
@@ -198,7 +229,6 @@ public abstract class InGameHudMixin {
 			progressTextureWidth = horizontal_progress_left_end_width + horizontal_progress_middle_segment_width + horizontal_progress_right_end_width;
 			backgroundMiddleSectionLength = background_additional_middle_segment_amount * horizontal_background_middle_segment_width;
 			progressMiddleSectionLength = progress_additional_middle_segment_amount * horizontal_progress_middle_segment_width;
-//			backgroundBarLength = horizontal_background_left_end_width + backgroundMiddleSectionLength + horizontal_background_right_end_width;
 			progressBarLength = horizontal_progress_left_end_width + progressMiddleSectionLength + horizontal_progress_right_end_width;
 		}
 		// endregion variable calculation
@@ -207,7 +237,9 @@ public abstract class InGameHudMixin {
 
 		if (this.oldMaxMana != max_build_up) {
 			this.oldMaxMana = max_build_up;
-			this.oldNormalizedManaRatio = normalizedBuildUpRatio;
+			if (!max_value_change_is_animated) {
+				this.oldNormalizedManaRatio = normalizedBuildUpRatio;
+			}
 		}
 
 		this.manaBarAnimationCounter = this.manaBarAnimationCounter + Math.max(1, build_up_reduction);
@@ -218,34 +250,34 @@ public abstract class InGameHudMixin {
 			this.manaBarAnimationCounter = 0;
 		}
 
-		// region background
+		this.client.getProfiler().push(element_profiler_location);
+
 		// background
 		if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP || fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
-			context.drawTexture(MANA_TEXTURES[3], build_up_element_x, build_up_element_y, 0, 0, backgroundTextureWidth, vertical_background_top_end_height, backgroundTextureWidth, backgroundTextureHeight);
+			context.drawTexture(texture_ids[3], elementX, elementY, 0, 0, backgroundTextureWidth, vertical_background_top_end_height, backgroundTextureWidth, backgroundTextureHeight);
 			if (background_additional_middle_segment_amount > 0) {
 				for (int i = 0; i < background_additional_middle_segment_amount; i++) {
-					context.drawTexture(MANA_TEXTURES[3], build_up_element_x, build_up_element_y + vertical_background_top_end_height + (i * vertical_background_middle_segment_height), 0, vertical_background_top_end_height, backgroundTextureWidth, vertical_background_middle_segment_height, backgroundTextureWidth, backgroundTextureHeight);
+					context.drawTexture(texture_ids[3], elementX, elementY + vertical_background_top_end_height + (i * vertical_background_middle_segment_height), 0, vertical_background_top_end_height, backgroundTextureWidth, vertical_background_middle_segment_height, backgroundTextureWidth, backgroundTextureHeight);
 				}
 			}
-			context.drawTexture(MANA_TEXTURES[3], build_up_element_x, build_up_element_y + vertical_background_top_end_height + backgroundMiddleSectionLength, 0, vertical_background_top_end_height + vertical_background_middle_segment_height, backgroundTextureWidth, vertical_background_bottom_end_height, backgroundTextureWidth, backgroundTextureHeight);
+			context.drawTexture(texture_ids[3], elementX, elementY + vertical_background_top_end_height + backgroundMiddleSectionLength, 0, vertical_background_top_end_height + vertical_background_middle_segment_height, backgroundTextureWidth, vertical_background_bottom_end_height, backgroundTextureWidth, backgroundTextureHeight);
 		} else {
-			context.drawTexture(MANA_TEXTURES[0], build_up_element_x, build_up_element_y, 0, 0, horizontal_background_left_end_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+			context.drawTexture(texture_ids[0], elementX, elementY, 0, 0, horizontal_background_left_end_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
 			if (background_additional_middle_segment_amount > 0) {
 				for (int i = 0; i < background_additional_middle_segment_amount; i++) {
-					context.drawTexture(MANA_TEXTURES[0], build_up_element_x + horizontal_background_left_end_width + (i * horizontal_background_middle_segment_width), build_up_element_y, horizontal_background_left_end_width, 0, horizontal_background_middle_segment_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+					context.drawTexture(texture_ids[0], elementX + horizontal_background_left_end_width + (i * horizontal_background_middle_segment_width), elementY, horizontal_background_left_end_width, 0, horizontal_background_middle_segment_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
 				}
 			}
-			context.drawTexture(MANA_TEXTURES[0], build_up_element_x + horizontal_background_left_end_width + backgroundMiddleSectionLength, build_up_element_y, horizontal_background_left_end_width + horizontal_background_middle_segment_width, 0, horizontal_progress_right_end_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
+			context.drawTexture(texture_ids[0], elementX + horizontal_background_left_end_width + backgroundMiddleSectionLength, elementY, horizontal_background_left_end_width + horizontal_background_middle_segment_width, 0, horizontal_progress_right_end_width, backgroundTextureHeight, backgroundTextureWidth, backgroundTextureHeight);
 		}
-		// endregion background
 
 		// progress
 		int displayRatio = enable_smooth_animation ? this.oldNormalizedManaRatio : normalizedBuildUpRatio;
 		if (displayRatio > 0) {
 			int ratioFirstPart;
 			int ratioLastPart;
-			int progressElementX = build_up_element_x + progress_offset_x;
-			int progressElementY = build_up_element_y + progress_offset_y;
+			int progressElementX = elementX + progress_offset_x;
+			int progressElementY = elementY + progress_offset_y;
 
 			if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP) {
 				// 1: bottom to top
@@ -253,7 +285,7 @@ public abstract class InGameHudMixin {
 				ratioFirstPart = Math.min(vertical_progress_bottom_end_height, displayRatio);
 				ratioLastPart = Math.min(vertical_progress_top_end_height, displayRatio - vertical_progress_bottom_end_height - progressMiddleSectionLength);
 
-				context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY + progressBarLength - ratioFirstPart, 0, progressTextureHeight - ratioFirstPart, progressTextureWidth, ratioFirstPart, progressTextureWidth, progressTextureHeight);
+				context.drawTexture(texture_ids[4], progressElementX, progressElementY + progressBarLength - ratioFirstPart, 0, progressTextureHeight - ratioFirstPart, progressTextureWidth, ratioFirstPart, progressTextureWidth, progressTextureHeight);
 				if (displayRatio > vertical_progress_bottom_end_height && background_additional_middle_segment_amount > 0) {
 					boolean breakDisplay = false;
 					for (int i = 0; i < progress_additional_middle_segment_amount; i++) {
@@ -263,7 +295,7 @@ public abstract class InGameHudMixin {
 								breakDisplay = true;
 								break;
 							}
-							context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY + progressBarLength - currentTextureY, 0, vertical_progress_top_end_height + vertical_progress_middle_segment_height - j, progressTextureWidth, 1, progressTextureWidth, progressTextureHeight);
+							context.drawTexture(texture_ids[4], progressElementX, progressElementY + progressBarLength - currentTextureY, 0, vertical_progress_top_end_height + vertical_progress_middle_segment_height - j, progressTextureWidth, 1, progressTextureWidth, progressTextureHeight);
 						}
 						if (breakDisplay) {
 							break;
@@ -272,7 +304,7 @@ public abstract class InGameHudMixin {
 
 				}
 				if (displayRatio > (vertical_progress_bottom_end_height + progressMiddleSectionLength)) {
-					context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY + vertical_progress_top_end_height - ratioLastPart, 0, vertical_progress_top_end_height - ratioLastPart, progressTextureWidth, ratioLastPart, progressTextureWidth, progressTextureHeight);
+					context.drawTexture(texture_ids[4], progressElementX, progressElementY + vertical_progress_top_end_height - ratioLastPart, 0, vertical_progress_top_end_height - ratioLastPart, progressTextureWidth, ratioLastPart, progressTextureWidth, progressTextureHeight);
 				}
 			}
 			else if (fill_direction == ClientConfig.FillDirection.RIGHT_TO_LEFT) {
@@ -281,7 +313,7 @@ public abstract class InGameHudMixin {
 				ratioFirstPart = Math.min(horizontal_progress_right_end_width, displayRatio);
 				ratioLastPart = Math.min(horizontal_progress_left_end_width, displayRatio - horizontal_progress_right_end_width - progressMiddleSectionLength);
 
-				context.drawTexture(MANA_TEXTURES[1], progressElementX + progressBarLength - ratioFirstPart, progressElementY, progressTextureWidth - ratioFirstPart, 0, ratioFirstPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+				context.drawTexture(texture_ids[1], progressElementX + progressBarLength - ratioFirstPart, progressElementY, progressTextureWidth - ratioFirstPart, 0, ratioFirstPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 				if (displayRatio > horizontal_progress_right_end_width && background_additional_middle_segment_amount > 0) {
 					boolean breakDisplay = false;
 					for (int i = 0; i < progress_additional_middle_segment_amount; i++) {
@@ -291,7 +323,7 @@ public abstract class InGameHudMixin {
 								breakDisplay = true;
 								break;
 							}
-							context.drawTexture(MANA_TEXTURES[1], progressElementX + progressBarLength - currentTextureX, progressElementY, horizontal_progress_left_end_width + horizontal_progress_middle_segment_width - j, 0, 1, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+							context.drawTexture(texture_ids[1], progressElementX + progressBarLength - currentTextureX, progressElementY, horizontal_progress_left_end_width + horizontal_progress_middle_segment_width - j, 0, 1, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 						}
 						if (breakDisplay) {
 							break;
@@ -300,7 +332,7 @@ public abstract class InGameHudMixin {
 
 				}
 				if (displayRatio > (horizontal_progress_right_end_width + progressMiddleSectionLength)) {
-					context.drawTexture(MANA_TEXTURES[1], progressElementX + horizontal_progress_left_end_width - ratioLastPart, progressElementY, horizontal_progress_left_end_width - ratioLastPart, 0, ratioLastPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+					context.drawTexture(texture_ids[1], progressElementX + horizontal_progress_left_end_width - ratioLastPart, progressElementY, horizontal_progress_left_end_width - ratioLastPart, 0, ratioLastPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 				}
 			}
 			else if (fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
@@ -309,7 +341,7 @@ public abstract class InGameHudMixin {
 				ratioFirstPart = Math.min(vertical_progress_top_end_height, displayRatio);
 				ratioLastPart = Math.min(vertical_progress_bottom_end_height, displayRatio - vertical_progress_top_end_height - progressMiddleSectionLength);
 
-				context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY, 0, 0, progressTextureWidth, ratioFirstPart, progressTextureWidth, progressTextureHeight);
+				context.drawTexture(texture_ids[4], progressElementX, progressElementY, 0, 0, progressTextureWidth, ratioFirstPart, progressTextureWidth, progressTextureHeight);
 				if (displayRatio > vertical_progress_top_end_height && background_additional_middle_segment_amount > 0) {
 					boolean breakDisplay = false;
 					for (int i = 0; i < progress_additional_middle_segment_amount; i++) {
@@ -319,7 +351,7 @@ public abstract class InGameHudMixin {
 								breakDisplay = true;
 								break;
 							}
-							context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY + currentTextureY, 0, vertical_progress_top_end_height + j, progressTextureWidth, 1, progressTextureWidth, progressTextureHeight);
+							context.drawTexture(texture_ids[4], progressElementX, progressElementY + currentTextureY, 0, vertical_progress_top_end_height + j, progressTextureWidth, 1, progressTextureWidth, progressTextureHeight);
 						}
 						if (breakDisplay) {
 							break;
@@ -327,7 +359,7 @@ public abstract class InGameHudMixin {
 					}
 				}
 				if (displayRatio > (vertical_progress_top_end_height + progressMiddleSectionLength)) {
-					context.drawTexture(MANA_TEXTURES[4], progressElementX, progressElementY + vertical_progress_top_end_height + progressMiddleSectionLength, 0, vertical_progress_top_end_height + vertical_progress_middle_segment_height, progressTextureWidth, ratioLastPart, progressTextureWidth, progressTextureHeight);
+					context.drawTexture(texture_ids[4], progressElementX, progressElementY + vertical_progress_top_end_height + progressMiddleSectionLength, 0, vertical_progress_top_end_height + vertical_progress_middle_segment_height, progressTextureWidth, ratioLastPart, progressTextureWidth, progressTextureHeight);
 				}
 			}
 			else {
@@ -336,7 +368,7 @@ public abstract class InGameHudMixin {
 				ratioFirstPart = Math.min(horizontal_progress_left_end_width, displayRatio);
 				ratioLastPart = Math.min(horizontal_progress_right_end_width, displayRatio - horizontal_progress_left_end_width - progressMiddleSectionLength);
 
-				context.drawTexture(MANA_TEXTURES[1], progressElementX, progressElementY, 0, 0, ratioFirstPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+				context.drawTexture(texture_ids[1], progressElementX, progressElementY, 0, 0, ratioFirstPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 				if (displayRatio > horizontal_progress_left_end_width && background_additional_middle_segment_amount > 0) {
 					boolean breakDisplay = false;
 					for (int i = 0; i < progress_additional_middle_segment_amount; i++) {
@@ -346,7 +378,7 @@ public abstract class InGameHudMixin {
 								breakDisplay = true;
 								break;
 							}
-							context.drawTexture(MANA_TEXTURES[1], progressElementX + currentTextureX, progressElementY, horizontal_progress_left_end_width + j, 0, 1, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+							context.drawTexture(texture_ids[1], progressElementX + currentTextureX, progressElementY, horizontal_progress_left_end_width + j, 0, 1, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 						}
 						if (breakDisplay) {
 							break;
@@ -354,7 +386,7 @@ public abstract class InGameHudMixin {
 					}
 				}
 				if (displayRatio > (horizontal_progress_left_end_width + progressMiddleSectionLength)) {
-					context.drawTexture(MANA_TEXTURES[1], progressElementX + horizontal_progress_left_end_width + progressMiddleSectionLength, progressElementY, horizontal_progress_left_end_width + horizontal_progress_middle_segment_width, 0, ratioLastPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
+					context.drawTexture(texture_ids[1], progressElementX + horizontal_progress_left_end_width + progressMiddleSectionLength, progressElementY, horizontal_progress_left_end_width + horizontal_progress_middle_segment_width, 0, ratioLastPart, progressTextureHeight, progressTextureWidth, progressTextureHeight);
 				}
 			}
 
@@ -365,40 +397,41 @@ public abstract class InGameHudMixin {
 				if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP) {
 					// 1: bottom to top
 					if (current_build_up > 0 && current_build_up < max_build_up) {
-						context.drawTexture(MANA_TEXTURES[5], overlayElementX, overlayElementY + progressBarLength - normalizedBuildUpRatio, 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
+						context.drawTexture(texture_ids[5], overlayElementX, overlayElementY + progressBarLength - normalizedBuildUpRatio, 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
 					}
 				} else if (fill_direction == ClientConfig.FillDirection.RIGHT_TO_LEFT) {
 					// 2: right to left
 					if (current_build_up > 0 && current_build_up < max_build_up) {
-						context.drawTexture(MANA_TEXTURES[2], overlayElementX + progressBarLength - normalizedBuildUpRatio, overlayElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
+						context.drawTexture(texture_ids[2], overlayElementX + progressBarLength - normalizedBuildUpRatio, overlayElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
 					}
 				} else if (fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
 					// 3: top to bottom
 					if (current_build_up > 0 && current_build_up < max_build_up) {
-						context.drawTexture(MANA_TEXTURES[5], overlayElementX, overlayElementY + normalizedBuildUpRatio, 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
+						context.drawTexture(texture_ids[5], overlayElementX, overlayElementY + normalizedBuildUpRatio, 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
 					}
 				} else {
 					// 0: left to right
 					if (current_build_up > 0 && current_build_up < max_build_up) {
-						context.drawTexture(MANA_TEXTURES[2], overlayElementX + normalizedBuildUpRatio, overlayElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
+						context.drawTexture(texture_ids[2], overlayElementX + normalizedBuildUpRatio, overlayElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
 					}
 				}
 			}
-		}
-	}
 
-	@Unique
-	private void manaAttributes$drawEffectBuildUpNumber(
-			DrawContext context,
-			String buildUpBarNumberString,
-			int build_up_bar_number_x,
-			int build_up_bar_number_y,
-			int build_up_bar_number_color
-	) {
-		context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x + 1, build_up_bar_number_y, 0, false);
-		context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x - 1, build_up_bar_number_y, 0, false);
-		context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y + 1, 0, false);
-		context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y - 1, 0, false);
-		context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y, build_up_bar_number_color, false);
+			if (show_number) {
+				String buildUpBarNumberString = show_max_value ? current_build_up + "/" + max_build_up : String.valueOf(current_build_up);
+				int buildUpBarNumberX = originX - (this.getTextRenderer().getWidth(buildUpBarNumberString) / 2) + number_offset_x;
+				int buildUpBarNumberY = originY + number_offset_y;
+
+				this.client.getProfiler().swap(number_profiler_location);
+
+				context.drawText(this.getTextRenderer(), buildUpBarNumberString, buildUpBarNumberX + 1, buildUpBarNumberY, 0, false);
+				context.drawText(this.getTextRenderer(), buildUpBarNumberString, buildUpBarNumberX - 1, buildUpBarNumberY, 0, false);
+				context.drawText(this.getTextRenderer(), buildUpBarNumberString, buildUpBarNumberX, buildUpBarNumberY + 1, 0, false);
+				context.drawText(this.getTextRenderer(), buildUpBarNumberString, buildUpBarNumberX, buildUpBarNumberY - 1, 0, false);
+				context.drawText(this.getTextRenderer(), buildUpBarNumberString, buildUpBarNumberX, buildUpBarNumberY, build_up_bar_number_color, false);
+			}
+		}
+
+		this.client.getProfiler().pop();
 	}
 }

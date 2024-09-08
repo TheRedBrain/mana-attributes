@@ -1,3 +1,8 @@
+# 2.3.0
+
+- further improvements to mana bar customization
+- added a missing translation keys
+
 # 2.2.0
 
 - update to 1.21.1

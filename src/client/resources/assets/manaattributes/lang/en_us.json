@@ -4,22 +4,84 @@
 	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
 	"attribute.name.generic.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
 	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
-	"effect.manaattributes.mana_regeneration_effect": "Mana Regeneration",
-	"effect.manaattributes.mana_regeneration_effect.description": "Your mana can regenerate.",
+	
 	"hud.message.manaTooLow": "Your mana is too low!",
+	
 	"text.autoconfig.manaattributes.title": "Mana Attributes",
+	
 	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
 	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
 	"text.autoconfig.manaattributes.option.client.dynamically_adjust_to_armor_bar": "Dynamically adjusts to the armor bar",
-	"text.autoconfig.manaattributes.option.client.mana_bar_additional_length": "Additional length of the mana bar",
-	"text.autoconfig.manaattributes.option.client.mana_bar_x_offset": "Mana bar x offset",
-	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Mana bar y offset",
-	"text.autoconfig.manaattributes.option.client.enable_smooth_animation": "Enable a smooth animation on value changes",
-	"text.autoconfig.manaattributes.option.client.mana_bar_animation_interval": "Animation update interval in ticks",
-	"text.autoconfig.manaattributes.option.client.show_current_value_overlay": "Displays the current value on the bar",
-	"text.autoconfig.manaattributes.option.client.show_mana_bar_number": "Show numeric mana value",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_x_offset": "Mana bar number x offset",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_y_offset": "Mana bar number y offset",
+
+	"text.autoconfig.manaattributes.option.client.offset_x": "X offset from origin",
+	"text.autoconfig.manaattributes.option.client.offset_y": "Y offset from origin",
+	"text.autoconfig.manaattributes.option.client.fill_direction": "Fill direction",
+	"text.autoconfig.manaattributes.option.client.origin": "Origin",
+
+	"text.autoconfig.manaattributes.option.client.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.manaattributes.option.client.background_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.manaattributes.option.client.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.manaattributes.option.client.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.manaattributes.option.client.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.manaattributes.option.client.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.manaattributes.option.client.horizontal_background_height": "Height",
+
+	"text.autoconfig.manaattributes.option.client.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.manaattributes.option.client.vertical_background_width": "Width",
+	"text.autoconfig.manaattributes.option.client.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.manaattributes.option.client.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.manaattributes.option.client.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.manaattributes.option.client.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.manaattributes.option.client.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.manaattributes.option.client.progress_offset_x": "X offset from background",
+	"text.autoconfig.manaattributes.option.client.progress_offset_y": "Y offset from background",
+	"text.autoconfig.manaattributes.option.client.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.manaattributes.option.client.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.manaattributes.option.client.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.manaattributes.option.client.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.manaattributes.option.client.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.manaattributes.option.client.horizontal_progress_height": "Height",
+
+	"text.autoconfig.manaattributes.option.client.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.manaattributes.option.client.vertical_progress_width": "Width",
+	"text.autoconfig.manaattributes.option.client.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.manaattributes.option.client.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.manaattributes.option.client.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.manaattributes.option.client.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.manaattributes.option.client.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.manaattributes.option.client.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.manaattributes.option.client.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.manaattributes.option.client.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.manaattributes.option.client.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.manaattributes.option.client.horizontal_overlay_width": "Width",
+	"text.autoconfig.manaattributes.option.client.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.manaattributes.option.client.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.manaattributes.option.client.vertical_overlay_width": "Width",
+	"text.autoconfig.manaattributes.option.client.vertical_overlay_height": "Height",
+
+	"text.autoconfig.manaattributes.option.client.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.manaattributes.option.client.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.manaattributes.option.client.animation_interval": "Animation interval",
+
+	"text.autoconfig.manaattributes.option.client.max_value_change_is_animated": "Animate changes to the max value",
+
+	"text.autoconfig.manaattributes.option.client.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.manaattributes.option.client.show_number": "Show number",
+
+	"text.autoconfig.manaattributes.option.client.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.manaattributes.option.client.show_max_value": "Show maximum value",
+
+	"text.autoconfig.manaattributes.option.client.number_offset_x": "X offset from origin",
+	"text.autoconfig.manaattributes.option.client.number_offset_y": "Y offset from origin",
+
+	"text.autoconfig.manaattributes.option.client.number_color": "Number color",
+
 	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
 }
