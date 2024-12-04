@@ -11,7 +11,11 @@ public interface ManaUsingEntity {
 
 	float manaattributes$getManaRegeneration();
 
+	float manaattributes$getUnreservedMana();
+
 	float manaattributes$getMaxMana();
+
+	float manaattributes$getReservedMana();
 
 	void manaattributes$addMana(float amount);
 

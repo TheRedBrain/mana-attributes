@@ -4,7 +4,8 @@
 	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
 	"attribute.name.generic.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
 	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
-	
+	"attribute.name.generic.reserved_mana": "Reserved Mana",
+
 	"hud.message.manaTooLow": "Your mana is too low!",
 	
 	"text.autoconfig.manaattributes.title": "Mana Attributes",

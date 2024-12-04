@@ -58,6 +58,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 				.add(ManaAttributes.MANA_REGENERATION_DELAY_THRESHOLD)
 				.add(ManaAttributes.DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD)
 				.add(ManaAttributes.MANA_TICK_THRESHOLD)
+				.add(ManaAttributes.RESERVED_MANA)
 		;
 	}
 
@@ -103,10 +104,10 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 							&& this.manaRegenerationDelayTimer >= this.manaattributes$getManaRegenerationDelayThreshold()
 							&& this.depletedManaRegenerationDelayTimer >= this.manaattributes$getDepletedManaRegenerationDelayThreshold()
 			) {
-				if (this.manaattributes$getMana() < this.manaattributes$getMaxMana()) {
+				if (this.manaattributes$getMana() < this.manaattributes$getUnreservedMana()) {
 					((ManaUsingEntity) this).manaattributes$addMana(this.manaattributes$getRegeneratedMana());
-				} else if (this.manaattributes$getMana() > this.manaattributes$getMaxMana()) {
-					this.manaattributes$setMana(this.manaattributes$getMaxMana());
+				} else if (this.manaattributes$getMana() > this.manaattributes$getUnreservedMana()) {
+					this.manaattributes$setMana(this.manaattributes$getUnreservedMana());
 				}
 				this.manaTickTimer = 0;
 			}
@@ -140,8 +141,18 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	}
 
 	@Override
+	public float manaattributes$getUnreservedMana() {
+		return this.manaattributes$getMaxMana() - ((this.manaattributes$getMaxMana() * this.manaattributes$getReservedMana()) / 100);
+	}
+
+	@Override
 	public float manaattributes$getMaxMana() {
 		return (float) this.getAttributeValue(ManaAttributes.MAX_MANA);
+	}
+
+	@Override
+	public float manaattributes$getReservedMana() {
+		return (float) this.getAttributeValue(ManaAttributes.RESERVED_MANA);
 	}
 
 	@Override
@@ -161,6 +172,6 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Override
 	public void manaattributes$setMana(float mana) {
-		this.dataTracker.set(MANA, MathHelper.clamp(mana, 0, this.manaattributes$getMaxMana()));
+		this.dataTracker.set(MANA, MathHelper.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
 	}
 }
