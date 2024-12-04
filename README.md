@@ -15,7 +15,7 @@ When mana is <= 0, regeneration is stopped for **_generic.depleted_mana_regenera
 - **_generic.depleted_mana_regeneration_delay_threshold_**: 60
 
 ## Customization
-When the gamerule "naturalManaRegeneration" is true, players have a mana regeneration of at least 1.
+When the gamerule "naturalManaRegeneration" is true, players have 1 additional mana regeneration.
 
 The client config allows customizing the HUD element.
 
