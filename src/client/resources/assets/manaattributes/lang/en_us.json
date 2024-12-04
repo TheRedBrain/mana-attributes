@@ -8,20 +8,83 @@
 
 	"hud.message.manaTooLow": "Your mana is too low!",
 
-	"text.autoconfig.manaattributes.title": "Mana Attributes",
-	"text.autoconfig.manaattributes.option.client.show_mana_bar": "Shows the mana bar",
-	"text.autoconfig.manaattributes.option.client.show_full_mana_bar": "Shows the mana bar even if it's full",
-	"text.autoconfig.manaattributes.option.client.dynamically_adjust_to_armor_bar": "Dynamically adjusts to the armor bar",
-	"text.autoconfig.manaattributes.option.client.mana_bar_additional_length": "Additional length of the mana bar",
-	"text.autoconfig.manaattributes.option.client.mana_bar_x_offset": "Mana bar x offset",
-	"text.autoconfig.manaattributes.option.client.mana_bar_y_offset": "Mana bar y offset",
-	"text.autoconfig.manaattributes.option.client.enable_smooth_animation": "Enable a smooth animation on value changes",
-	"text.autoconfig.manaattributes.option.client.mana_bar_animation_interval": "Animation update interval in ticks",
-	"text.autoconfig.manaattributes.option.client.show_current_value_overlay": "Displays the current value on the bar",
-	"text.autoconfig.manaattributes.option.client.show_mana_bar_number": "Show numeric mana value",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_color": "Color of the mana bar number",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_x_offset": "Mana bar number x offset",
-	"text.autoconfig.manaattributes.option.client.mana_bar_number_y_offset": "Mana bar number y offset",
+	"manaattributes.client": "Client Side Settings",
+
+	"manaattributes.client.show_mana_bar": "Shows the mana bar",
+
+	"manaattributes.client.show_full_mana_bar": "Show full bar",
+	"manaattributes.client.show_full_mana_bar.desc": "Shows the mana bar even if it's full",
+
+	"manaattributes.client.positionSettings": "Position Settings",
+
+	"manaattributes.client.positionSettings.origin": "Origin",
+
+	"manaattributes.client.positionSettings.dynamically_adjust_to_armor_bar": "Adjusts to armor bar",
+	"manaattributes.client.positionSettings.dynamically_adjust_to_armor_bar.desc": "When armor HUD is visible, the mana bar is moved up",
+
+	"manaattributes.client.positionSettings.is_centered": "Is centered",
+
+	"manaattributes.client.positionSettings.offsets_x": "X Offset from Origin",
+	"manaattributes.client.positionSettings.offsets_x.desc": "Only the highest reached threshold is used.",
+	"manaattributes.client.positionSettings.offsets_y": "Y Offset from Origin",
+	"manaattributes.client.positionSettings.offsets_y.desc": "Only the highest reached threshold is used.",
+
+	"manaattributes.client.fill_direction": "Fill direction",
+
+	"manaattributes.client.textureSettings.backgroundTextureSettings": "Background",
+	"manaattributes.client.textureSettings.progressTextureSettings": "Progress",
+	"manaattributes.client.textureSettings.reservedTextureSettings": "Reserved",
+
+	"manaattributes.client.texture_layer.offset_x": "X offset from background",
+	"manaattributes.client.texture_layer.offset_y": "Y offset from background",
+	"manaattributes.client.texture_layer.middle_segment_amounts": "Middle segment amounts",
+	"manaattributes.client.texture_layer.middle_segment_amounts.desc": "Only the highest reached threshold is used.",
+
+	"manaattributes.client.texture_layer.horizontalTextureSettings": "Horizontal Textures",
+	"manaattributes.client.texture_layer.horizontal_left_end_width": "Left End Width",
+	"manaattributes.client.texture_layer.horizontal_middle_segment_width": "Middle Segment Width",
+	"manaattributes.client.texture_layer.horizontal_right_end_width": "Right End Width",
+	"manaattributes.client.texture_layer.horizontal_height": "Height",
+
+	"manaattributes.client.texture_layer.verticalTextureSettings": "Vertical Textures",
+	"manaattributes.client.texture_layer.vertical_width": "Width",
+	"manaattributes.client.texture_layer.vertical_top_end_height": "Top End Height",
+	"manaattributes.client.texture_layer.vertical_middle_segment_height": "Middle Segment Height",
+	"manaattributes.client.texture_layer.vertical_bottom_end_height": "Bottom End Height",
+
+	"manaattributes.client.show_current_value_overlay": "Show overlay",
+	"manaattributes.client.show_current_value_overlay.desc": "Indicates the current value",
+
+	"manaattributes.client.textureSettings.overlayTextureSettings": "Overlay",
+
+	"manaattributes.client.textureSettings.overlayTextureSettings.offset_x": "X offset from progress",
+	"manaattributes.client.textureSettings.overlayTextureSettings.offset_y": "Y offset from progress",
+
+	"manaattributes.client.textureSettings.overlayTextureSettings.horizontal_width": "Horizontal Width",
+	"manaattributes.client.textureSettings.overlayTextureSettings.horizontal_height": "Horizontal Height",
+
+	"manaattributes.client.textureSettings.overlayTextureSettings.vertical_width": "Vertical Width",
+	"manaattributes.client.textureSettings.overlayTextureSettings.vertical_height": "Vertical Height",
+
+	"manaattributes.client.enable_smooth_animation": "Enable smooth animation",
+
+	"manaattributes.client.animationSettings": "Animation Settings",
+
+	"manaattributes.client.animationSettings.animation_interval": "Animation interval",
+	"manaattributes.client.animationSettings.max_value_change_is_animated": "Animate max value changes",
+
+	"manaattributes.client.show_number": "Show number",
+	"manaattributes.client.show_number.desc": "Shows the current mana amount as a number",
+
+	"manaattributes.client.numberSettings": "Number Settings",
+
+	"manaattributes.client.numberSettings.show_max_value": "Show maximum value",
+	"manaattributes.client.numberSettings.show_max_value.desc": "Additionally shows the maximum value. When mana is reserved, it shows the unreserved maximum and the real maximum (in brackets).",
+
+	"manaattributes.client.numberSettings.number_offset_x": "X offset from origin",
+	"manaattributes.client.numberSettings.number_offset_y": "Y offset from origin",
+
+	"manaattributes.client.numberSettings.number_color": "Number color",
 
 	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
 }
