@@ -1,3 +1,13 @@
+# 2.4.0
+
+- added "generic.reserved_mana" entity attribute
+- changed "natural mana regeneration" gamerule to simply add 1 mana regeneration. The previous implementation prevented mana regeneration from ever becoming negative.
+- HUD element overhaul, improves mod compatibility, increases customization options
+- generally improved config layout
+- removed dependency on Cloth Config
+- added dependency on Fzzy Config
+- added dependency on Resource Bar API
+
 # 2.3.0
 
 - further improvements to mana bar customization
