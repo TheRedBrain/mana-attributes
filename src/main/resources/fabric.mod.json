@@ -18,9 +18,6 @@
 		],
 		"client": [
 			"com.github.theredbrain.manaattributes.ManaAttributesClient"
-		],
-		"modmenu": [
-			"com.github.theredbrain.manaattributes.compatibility.ModMenuCompatibility"
 		]
 	},
 	"mixins": [
@@ -34,6 +31,7 @@
 		"minecraft": "${minecraft_version}",
 		"fabricloader": ">=${loader_version}",
 		"fabric-api": "*",
-		"cloth-config": ">=${cloth_config_version}"
+		"fzzy_config": ">=${fzzy_config_version}",
+		"resourcebarapi": ">=${resource_bar_api_version}"
 	}
 }

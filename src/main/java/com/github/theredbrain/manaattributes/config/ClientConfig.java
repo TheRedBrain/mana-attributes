@@ -1,158 +1,174 @@
 package com.github.theredbrain.manaattributes.config;
 
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import com.github.theredbrain.manaattributes.ManaAttributes;
+import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
+import me.fzzyhmstrs.fzzy_config.annotations.Translation;
+import me.fzzyhmstrs.fzzy_config.config.Config;
+import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 
-@Config(
-		name = "client"
-)
-public class ClientConfig implements ConfigData {
+import java.util.HashMap;
+
+public class ClientConfig extends Config {
+	public ClientConfig() {
+		super(ManaAttributes.identifier("client"));
+	}
+
 	public boolean show_mana_bar = true;
 	public boolean show_full_mana_bar = true;
-	public boolean dynamically_adjust_to_armor_bar = true;
+	public PositionSettings positionSettings = new PositionSettings();
 
-	@Comment("offset_x")
-	public int offset_x = -91;
-	@Comment("offset_y")
-	public int offset_y = -45;
-	@ConfigEntry.Gui.EnumHandler(
-			option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
-	)
-	@Comment("fill_direction")
-	public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
-	@ConfigEntry.Gui.EnumHandler(
-			option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
-	)
-	@Comment("origin")
-	public Origin origin = Origin.BOTTOM_MIDDLE;
+	public static class PositionSettings extends ConfigSection {
+		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.BOTTOM_MIDDLE;
+		public boolean dynamically_adjust_to_armor_bar = true;
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("background_middle_segment_amount")
-	public int background_middle_segment_amount = 172;
+		public boolean is_centered = false;
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("horizontal_background_left_end_width")
-	public int horizontal_background_left_end_width = 5;
-	@Comment("horizontal_background_middle_segment_width")
-	public int horizontal_background_middle_segment_width = 1;
-	@Comment("horizontal_background_right_end_width")
-	public int horizontal_background_right_end_width = 5;
-	@Comment("horizontal_background_height")
-	public int horizontal_background_height = 5;
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("vertical_background_width")
-	public int vertical_background_width = 5;
-	@ConfigEntry.Gui.PrefixText
-	@Comment("vertical_background_top_end_height")
-	public int vertical_background_top_end_height = 5;
-	@Comment("vertical_background_middle_segment_height")
-	public int vertical_background_middle_segment_height = 1;
-	@Comment("vertical_background_bottom_end_height")
-	public int vertical_background_bottom_end_height = 5;
+		public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+			put(0, -91);
+		}}, new ValidatedInt(), new ValidatedInt());
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("progress_offset_x")
-	public int progress_offset_x = 0;
-	@Comment("progress_offset_y")
-	public int progress_offset_y = 0;
-	@Comment("progress_middle_segment_amount")
-	public int progress_middle_segment_amount = 172;
+		public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+			put(0, -45);
+		}}, new ValidatedInt(), new ValidatedInt());
+	}
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("horizontal_progress_left_end_width")
-	public int horizontal_progress_left_end_width = 5;
-	@Comment("horizontal_progress_middle_segment_width")
-	public int horizontal_progress_middle_segment_width = 1;
-	@Comment("horizontal_progress_right_end_width")
-	public int horizontal_progress_right_end_width = 5;
-	@Comment("horizontal_progress_height")
-	public int horizontal_progress_height = 5;
+	public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("vertical_progress_width")
-	public int vertical_progress_width = 5;
-	@ConfigEntry.Gui.PrefixText
-	@Comment("vertical_progress_top_end_height")
-	public int vertical_progress_top_end_height = 5;
-	@Comment("vertical_progress_middle_segment_height")
-	public int vertical_progress_middle_segment_height = 1;
-	@Comment("vertical_progress_bottom_end_height")
-	public int vertical_progress_bottom_end_height = 5;
-
-	@ConfigEntry.Gui.PrefixText
-	@Comment("show_current_value_overlay")
 	public boolean show_current_value_overlay = false;
 
-	@Comment("overlay_offset_x")
-	public int overlay_offset_x = -2;
-	@Comment("overlay_offset_y")
-	public int overlay_offset_y = 0;
+	public TextureSettings textureSettings = new TextureSettings();
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("horizontal_overlay_width")
-	public int horizontal_overlay_width = 5;
-	@Comment("horizontal_overlay_height")
-	public int horizontal_overlay_height = 5;
+	public static class TextureSettings extends ConfigSection {
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("vertical_overlay_width")
-	public int vertical_overlay_width = 5;
-	@Comment("vertical_overlay_height")
-	public int vertical_overlay_height = 5;
+		public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("enable_smooth_animation")
+		@Translation(prefix = "manaattributes.client.texture_layer")
+		public static class BackgroundTextureSettings extends ConfigSection {
+			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 172);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class HorizontalTextureSettings extends ConfigSection {
+				public int horizontal_left_end_width = 5;
+				public int horizontal_middle_segment_width = 1;
+				public int horizontal_right_end_width = 5;
+				public int horizontal_height = 5;
+			}
+
+			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class VerticalTextureSettings extends ConfigSection {
+				public int vertical_width = 5;
+				public int vertical_top_end_height = 5;
+				public int vertical_middle_segment_height = 1;
+				public int vertical_bottom_end_height = 5;
+			}
+		}
+
+
+		public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+		@Translation(prefix = "manaattributes.client.texture_layer")
+		public static class ProgressTextureSettings extends ConfigSection {
+			public int offset_x = 0;
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 172);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class HorizontalTextureSettings extends ConfigSection {
+				public int horizontal_left_end_width = 5;
+				public int horizontal_middle_segment_width = 1;
+				public int horizontal_right_end_width = 5;
+				public int horizontal_height = 5;
+			}
+
+			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class VerticalTextureSettings extends ConfigSection {
+				public int vertical_width = 5;
+				public int vertical_top_end_height = 5;
+				public int vertical_middle_segment_height = 1;
+				public int vertical_bottom_end_height = 5;
+			}
+		}
+
+		public ReservedTextureSettings reservedTextureSettings = new ReservedTextureSettings();
+
+		@Translation(prefix = "manaattributes.client.texture_layer")
+		public static class ReservedTextureSettings extends ConfigSection {
+			public int offset_x = 0;
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 172);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class HorizontalTextureSettings extends ConfigSection {
+				public int horizontal_left_end_width = 5;
+				public int horizontal_middle_segment_width = 1;
+				public int horizontal_right_end_width = 5;
+				public int horizontal_height = 5;
+			}
+
+			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
+
+			@Translation(prefix = "manaattributes.client.texture_layer")
+			public static class VerticalTextureSettings extends ConfigSection {
+				public int vertical_width = 5;
+				public int vertical_top_end_height = 5;
+				public int vertical_middle_segment_height = 1;
+				public int vertical_bottom_end_height = 5;
+			}
+		}
+
+		public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+		public static class OverlayTextureSettings extends ConfigSection {
+
+			public int offset_x = -2;
+			public int offset_y = 0;
+
+			public int horizontal_width = 5;
+			public int horizontal_height = 5;
+
+			public int vertical_width = 5;
+			public int vertical_height = 5;
+		}
+	}
+
 	public boolean enable_smooth_animation = true;
-	@Comment("animation_interval")
-	public int animation_interval = 1;
-	@Comment("max_value_change_is_animated")
-	public boolean max_value_change_is_animated = false;
+	public AnimationsSettings animationSettings = new AnimationsSettings();
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("show_number")
+	public static class AnimationsSettings extends ConfigSection {
+		public int animation_interval = 1;
+		public boolean max_value_change_is_animated = false;
+	}
+
 	public boolean show_number = false;
 
-	@ConfigEntry.Gui.PrefixText
-	@Comment("show_max_value")
-	public boolean show_max_value = false;
+	public NumberSettings numberSettings = new NumberSettings();
 
-	@Comment("number_offset_x")
-	public int number_offset_x = 0;
-	@Comment("number_offset_y")
-	public int number_offset_y = -46;
-
-	@Comment("number_color")
-	public int number_color = -6250336;
-
-
-	public ClientConfig() {
-	}
-
-	public enum FillDirection {
-		LEFT_TO_RIGHT,
-		BOTTOM_TO_TOP,
-		RIGHT_TO_LEFT,
-		TOP_TO_BOTTOM;
-
-		FillDirection() {
-		}
-	}
-
-	public enum Origin {
-		TOP_LEFT,
-		TOP_MIDDLE,
-		TOP_RIGHT,
-		MIDDLE_LEFT,
-		MIDDLE_MIDDLE,
-		MIDDLE_RIGHT,
-		BOTTOM_LEFT,
-		BOTTOM_MIDDLE,
-		BOTTOM_RIGHT;
-
-		Origin() {
-		}
+	public static class NumberSettings extends ConfigSection {
+		public boolean show_max_value = false;
+		public int offset_x = 0;
+		public int offset_y = -46;
+		public ValidatedColor color = new ValidatedColor(150, 150, 150);
 	}
 }
