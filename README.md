@@ -8,15 +8,18 @@ When mana is reduced, regeneration is stopped for **_generic.mana_regeneration_d
 
 When mana is <= 0, regeneration is stopped for **_generic.depleted_mana_regeneration_delay_threshold_** ticks.
 
+**_generic.reserved_mana_** describes the percentage amount of maximum mana that is currently not available.
+
 ### Default attribute values
 - **_generic.max_mana_**: 0
 - **_generic.mana_regeneration_**: 0
 - **_generic.mana_tick_threshold_**: 20
 - **_generic.mana_regeneration_delay_threshold_**: 20
 - **_generic.depleted_mana_regeneration_delay_threshold_**: 60
+- **_generic.reserved_stamina_**: 0
 
 ## Customization
-When the gamerule "naturalManaRegeneration" is true, players have a mana regeneration of at least 1.
+When the gamerule "naturalManaRegeneration" is true, players have 1 additional mana regeneration.
 
 The client config allows customizing the HUD element. The details are explained in [this wiki article](https://github.com/TheRedBrain/overhauled-damage/wiki/Resource-Bar-Customization).
 
