@@ -15,5 +15,6 @@ public class EntityAttributesMixin {
 		ManaAttributes.MANA_REGENERATION_DELAY_THRESHOLD = Registry.registerReference(Registries.ATTRIBUTE, ManaAttributes.identifier("generic.mana_regeneration_delay_threshold"), new ClampedEntityAttribute("attribute.name.generic.mana_regeneration_delay_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		ManaAttributes.DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD = Registry.registerReference(Registries.ATTRIBUTE, ManaAttributes.identifier("generic.depleted_mana_regeneration_delay_threshold"), new ClampedEntityAttribute("attribute.name.generic.depleted_mana_regeneration_delay_threshold", 60.0, 0.0, 1024.0).setTracked(true));
 		ManaAttributes.MANA_TICK_THRESHOLD = Registry.registerReference(Registries.ATTRIBUTE, ManaAttributes.identifier("generic.mana_tick_threshold"), new ClampedEntityAttribute("attribute.name.generic.mana_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
+		ManaAttributes.RESERVED_MANA = Registry.registerReference(Registries.ATTRIBUTE, ManaAttributes.identifier("generic.reserved_mana"), new ClampedEntityAttribute("attribute.name.generic.reserved_mana", 0.0F, 0.0F, 100.0F).setTracked(true));
 	}
 }
