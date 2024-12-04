@@ -103,9 +103,10 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 							&& this.manaRegenerationDelayTimer >= this.manaattributes$getManaRegenerationDelayThreshold()
 							&& this.depletedManaRegenerationDelayTimer >= this.manaattributes$getDepletedManaRegenerationDelayThreshold()
 			) {
-				if (this.manaattributes$getMana() < this.manaattributes$getUnreservedMana()) {
+				if (this.manaattributes$getMana() < this.manaattributes$getUnreservedMana() || this.manaattributes$getRegeneratedMana() < 0) {
 					((ManaUsingEntity) this).manaattributes$addMana(this.manaattributes$getRegeneratedMana());
-				} else if (this.manaattributes$getMana() > this.manaattributes$getUnreservedMana()) {
+				}
+				if (this.manaattributes$getMana() > this.manaattributes$getUnreservedMana()) {
 					this.manaattributes$setMana(this.manaattributes$getUnreservedMana());
 				}
 				this.manaTickTimer = 0;
@@ -158,6 +159,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	public void manaattributes$addMana(float amount) {
 		float f = this.manaattributes$getMana();
 		this.manaattributes$setMana(f + amount);
+		ManaAttributes.LOGGER.info("added "+ amount + " mana");
 		if (amount < 0) {
 			this.manaRegenerationDelayTimer = 0;
 			this.manaTickTimer = 0;

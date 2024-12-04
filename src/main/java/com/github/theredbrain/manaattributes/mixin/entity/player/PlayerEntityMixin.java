@@ -17,6 +17,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ManaUsin
 
 	@Override
 	public float manaattributes$getRegeneratedMana() {
-		return Math.max(this.manaattributes$getManaRegeneration(), (this.getServer() != null && this.getServer().getGameRules().getBoolean(GameRulesRegistry.NATURAL_MANA_REGENERATION) ? 1.0F : 0.0F));
+		return this.manaattributes$getManaRegeneration() + (this.getServer() != null && this.getServer().getGameRules().getBoolean(GameRulesRegistry.NATURAL_MANA_REGENERATION) ? 1.0F : 0.0F);
 	}
 }
