@@ -81,6 +81,8 @@
 	"manaattributes.client.numberSettings.show_max_value": "Show maximum value",
 	"manaattributes.client.numberSettings.show_max_value.desc": "Additionally shows the maximum value. When mana is reserved, it shows the unreserved maximum and the real maximum (in brackets).",
 
+	"manaattributes.client.numberSettings.show_when_mana_full": "Show when mana is full",
+
 	"manaattributes.client.numberSettings.number_offset_x": "X offset from origin",
 	"manaattributes.client.numberSettings.number_offset_y": "Y offset from origin",
 
