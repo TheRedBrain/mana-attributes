@@ -16,10 +16,6 @@ public class ClientConfig extends Config {
 		super(ManaAttributes.identifier("client"));
 	}
 
-	public void onUpdateClient() {
-		ResourceBarAPIClient.clearCache(ManaAttributes.MOD_ID + ":mana", new double[]{-1, -1, 0, 0, 0, 0, 0, 0});
-	}
-
 	public boolean show_mana_bar = true;
 	public boolean show_full_mana_bar = true;
 	public PositionSettings positionSettings = new PositionSettings();
