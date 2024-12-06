@@ -1,4 +1,4 @@
-# 2.5.0
+# 2.5.1
 
 - fixed "offset_from_origin" config values not working correctly
 - mana number display is now independent of the mana bar
