@@ -28,6 +28,11 @@
 			"environment": "client"
 		}
 	],
+	"custom": {
+		"fzzy_config": [
+			"manaattributes"
+		]
+	},
 	"depends": {
 		"fabricloader": ">=${loader_version}",
 		"minecraft": "${minecraft_version}",

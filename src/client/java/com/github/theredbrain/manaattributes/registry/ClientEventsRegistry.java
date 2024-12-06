@@ -134,7 +134,7 @@ public class ClientEventsRegistry {
 			}
 		});
 		ConfigApi.event().onUpdateClient((identifier, config) -> {
-			if (identifier.equals(Identifier.tryParse(RESOURCE_BAR_IDENTIFIER_STRING))) {
+			if (identifier.equals(Identifier.of(ManaAttributes.MOD_ID, "client"))) {
 				ResourceBarAPIClient.clearCache(RESOURCE_BAR_IDENTIFIER_STRING, new double[]{-1, -1, 0, 0, 0, 0, 0, 0});
 			}
 		});
