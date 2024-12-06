@@ -1,3 +1,8 @@
+# 2.5.0
+
+- fixed "offset_from_origin" config values not working correctly
+- mana number display is now independent of the mana bar
+
 # 2.4.0
 
 - added "generic.reserved_mana" entity attribute
