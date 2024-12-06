@@ -5,6 +5,7 @@ import com.github.theredbrain.manaattributes.ManaAttributesClient;
 import com.github.theredbrain.manaattributes.config.ClientConfig;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
+import me.fzzyhmstrs.fzzy_config.api.ConfigApi;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +13,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class ClientEventsRegistry {
+	private static final String RESOURCE_BAR_IDENTIFIER_STRING = ManaAttributes.MOD_ID + ":mana";
+
 	private static final Identifier[] STAMINA_TEXTURES = {
 			ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_background_left_end.png"),
 			ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_background_middle_segment.png"),
@@ -66,7 +69,7 @@ public class ClientEventsRegistry {
 						minecraftClient,
 						minecraftClient.textRenderer,
 						matrixStack,
-						ManaAttributes.MOD_ID + ":mana",
+						RESOURCE_BAR_IDENTIFIER_STRING,
 						new double[]{-1, -1, 0, 0, 0, 0, 0, 0},
 						clientConfig.show_mana_bar && maxMana > 0 && (mana < maxMana || clientConfig.show_full_mana_bar),
 						mana,
@@ -129,7 +132,11 @@ public class ClientEventsRegistry {
 						clientConfig.numberSettings.color.toInt()
 				);
 			}
-		}
-	});
-}
+		});
+		ConfigApi.event().onUpdateClient((identifier, config) -> {
+			if (identifier.equals(Identifier.tryParse(RESOURCE_BAR_IDENTIFIER_STRING))) {
+				ResourceBarAPIClient.clearCache(RESOURCE_BAR_IDENTIFIER_STRING, new double[]{-1, -1, 0, 0, 0, 0, 0, 0});
+			}
+		});
+	}
 }
