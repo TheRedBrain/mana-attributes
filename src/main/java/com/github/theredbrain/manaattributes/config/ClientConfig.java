@@ -2,16 +2,21 @@ package com.github.theredbrain.manaattributes.config;
 
 import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
+import me.fzzyhmstrs.fzzy_config.annotations.ConvertFrom;
 import me.fzzyhmstrs.fzzy_config.annotations.Translation;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
+@ConvertFrom(fileName = "client.json5", folder = "manaattributes")
 public class ClientConfig extends Config {
+
 	public ClientConfig() {
 		super(ManaAttributes.identifier("client"));
 	}
@@ -24,7 +29,6 @@ public class ClientConfig extends Config {
 	public static class PositionSettings extends ConfigSection {
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.BOTTOM_MIDDLE;
 		public boolean dynamically_adjust_to_armor_bar = true;
-		public boolean is_centered = false;
 		public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 			put(0, -91);
 		}}, new ValidatedInt(), new ValidatedInt());
@@ -35,7 +39,7 @@ public class ClientConfig extends Config {
 
 	public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
-	public boolean show_current_value_overlay = true;
+	public boolean show_current_value_overlay = false;
 
 	public TextureSettings textureSettings = new TextureSettings();
 
@@ -44,28 +48,18 @@ public class ClientConfig extends Config {
 
 		@Translation(prefix = "manaattributes.client.texture_layer")
 		public static class BackgroundTextureSettings extends ConfigSection {
-			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 172);
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 5);
 			}}, new ValidatedInt(), new ValidatedInt());
-			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 182);
+			}}, new ValidatedInt(), new ValidatedInt());
 
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class HorizontalTextureSettings extends ConfigSection {
-				public int horizontal_left_end_width = 5;
-				public int horizontal_middle_segment_width = 1;
-				public int horizontal_right_end_width = 5;
-				public int horizontal_height = 5;
-			}
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
 
-			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
-
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class VerticalTextureSettings extends ConfigSection {
-				public int vertical_width = 5;
-				public int vertical_top_end_height = 5;
-				public int vertical_middle_segment_height = 1;
-				public int vertical_bottom_end_height = 5;
-			}
 		}
 
 		public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
@@ -74,28 +68,34 @@ public class ClientConfig extends Config {
 		public static class ProgressTextureSettings extends ConfigSection {
 			public int offset_x = 0;
 			public int offset_y = 0;
-			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 172);
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 5);
 			}}, new ValidatedInt(), new ValidatedInt());
-			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 182);
+			}}, new ValidatedInt(), new ValidatedInt());
 
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class HorizontalTextureSettings extends ConfigSection {
-				public int horizontal_left_end_width = 5;
-				public int horizontal_middle_segment_width = 1;
-				public int horizontal_right_end_width = 5;
-				public int horizontal_height = 5;
-			}
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+			public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
 
-			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+			public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
 
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class VerticalTextureSettings extends ConfigSection {
-				public int vertical_width = 5;
-				public int vertical_top_end_height = 5;
-				public int vertical_middle_segment_height = 1;
-				public int vertical_bottom_end_height = 5;
-			}
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+			public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+			public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
+
 		}
 
 		public ReservedTextureSettings reservedTextureSettings = new ReservedTextureSettings();
@@ -104,43 +104,68 @@ public class ClientConfig extends Config {
 		public static class ReservedTextureSettings extends ConfigSection {
 			public int offset_x = 0;
 			public int offset_y = 0;
-			public ValidatedMap<Integer, Integer> middle_segment_amounts = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 172);
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 5);
 			}}, new ValidatedInt(), new ValidatedInt());
-			public HorizontalTextureSettings horizontalTextureSettings = new HorizontalTextureSettings();
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 182);
+			}}, new ValidatedInt(), new ValidatedInt());
 
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class HorizontalTextureSettings extends ConfigSection {
-				public int horizontal_left_end_width = 5;
-				public int horizontal_middle_segment_width = 1;
-				public int horizontal_right_end_width = 5;
-				public int horizontal_height = 5;
-			}
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
 
-			public VerticalTextureSettings verticalTextureSettings = new VerticalTextureSettings();
-
-			@Translation(prefix = "manaattributes.client.texture_layer")
-			public static class VerticalTextureSettings extends ConfigSection {
-				public int vertical_width = 5;
-				public int vertical_top_end_height = 5;
-				public int vertical_middle_segment_height = 1;
-				public int vertical_bottom_end_height = 5;
-			}
 		}
 
 		public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
 
+		@Translation(prefix = "manaattributes.client.texture_layer")
 		public static class OverlayTextureSettings extends ConfigSection {
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 			public int offset_x = -2;
+			@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 			public int offset_y = 0;
-			public int horizontal_width = 5;
-			public int horizontal_height = 5;
-			public int vertical_width = 5;
-			public int vertical_height = 5;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 5);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 5);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+				put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"));
+			}}, new ValidatedInt(), new ValidatedIdentifier());
+
 		}
 	}
 
+	public boolean show_icon = false;
+
+	public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+	@Translation(prefix = "manaattributes.client.texture_layer")
+	public static class IconTextureSettings extends ConfigSection {
+		@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+		public int offset_x = 0;
+		@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
+		public int offset_y = 0;
+
+		public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+			put(0, 0);
+		}}, new ValidatedInt(), new ValidatedInt());
+		public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+			put(0, 0);
+		}}, new ValidatedInt(), new ValidatedInt());
+
+		public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+		}, new ValidatedInt(), new ValidatedIdentifier());
+
+	}
+
 	public boolean enable_smooth_animation = true;
+
 	public AnimationsSettings animationSettings = new AnimationsSettings();
 
 	public static class AnimationsSettings extends ConfigSection {
@@ -149,6 +174,7 @@ public class ClientConfig extends Config {
 	}
 
 	public boolean show_number = false;
+
 	public NumberSettings numberSettings = new NumberSettings();
 
 	public static class NumberSettings extends ConfigSection {
