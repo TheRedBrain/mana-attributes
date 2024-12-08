@@ -1,3 +1,7 @@
+# 2.6.0
+
+- changed default value of "generic.max_mana" to 10
+
 # 2.5.1
 
 - fixed "offset_from_origin" config values not working correctly
