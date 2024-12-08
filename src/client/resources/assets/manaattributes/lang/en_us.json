@@ -31,40 +31,40 @@
 
 	"manaattributes.client.fill_direction": "Fill direction",
 
-	"manaattributes.client.textureSettings.backgroundTextureSettings": "Background",
-	"manaattributes.client.textureSettings.progressTextureSettings": "Progress",
-	"manaattributes.client.textureSettings.reservedTextureSettings": "Reserved",
+	"manaattributes.client.textureSettings.backgroundTextureSettings": "Background Settings",
+	"manaattributes.client.textureSettings.progressTextureSettings": "Progress Settings",
+	"manaattributes.client.textureSettings.reservedTextureSettings": "Reserved Settings",
+
+	"manaattributes.client.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids": "Progress Decrease Animation Texture Ids",
+	"manaattributes.client.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids": "Progress Increase Animation Texture Ids",
+	"manaattributes.client.textureSettings.progressTextureSettings.progress_increase_value_texture_ids": "Progress Increase Value Texture Ids",
+	"manaattributes.client.textureSettings.progressTextureSettings.progress_texture_ids": "Progress Texture Ids",
 
 	"manaattributes.client.texture_layer.offset_x": "X offset from background",
 	"manaattributes.client.texture_layer.offset_y": "Y offset from background",
-	"manaattributes.client.texture_layer.middle_segment_amounts": "Middle segment amounts",
-	"manaattributes.client.texture_layer.middle_segment_amounts.desc": "Only the highest reached threshold is used.",
 
-	"manaattributes.client.texture_layer.horizontalTextureSettings": "Horizontal Textures",
-	"manaattributes.client.texture_layer.horizontal_left_end_width": "Left End Width",
-	"manaattributes.client.texture_layer.horizontal_middle_segment_width": "Middle Segment Width",
-	"manaattributes.client.texture_layer.horizontal_right_end_width": "Right End Width",
-	"manaattributes.client.texture_layer.horizontal_height": "Height",
-
-	"manaattributes.client.texture_layer.verticalTextureSettings": "Vertical Textures",
-	"manaattributes.client.texture_layer.vertical_width": "Width",
-	"manaattributes.client.texture_layer.vertical_top_end_height": "Top End Height",
-	"manaattributes.client.texture_layer.vertical_middle_segment_height": "Middle Segment Height",
-	"manaattributes.client.texture_layer.vertical_bottom_end_height": "Bottom End Height",
+	"manaattributes.client.texture_layer.texture_heights": "Texture Heights",
+	"manaattributes.client.texture_layer.texture_heights.desc": "Only the highest reached threshold is used.",
+	"manaattributes.client.texture_layer.texture_widths": "Texture Widths",
+	"manaattributes.client.texture_layer.texture_widths.desc": "Only the highest reached threshold is used.",
+	"manaattributes.client.texture_layer.texture_ids": "Texture Identifiers",
+	"manaattributes.client.texture_layer.texture_ids.desc": "Only the highest reached threshold is used.",
 
 	"manaattributes.client.show_current_value_overlay": "Show overlay",
 	"manaattributes.client.show_current_value_overlay.desc": "Indicates the current value",
 
-	"manaattributes.client.textureSettings.overlayTextureSettings": "Overlay",
+	"manaattributes.client.textureSettings.overlayTextureSettings": "Overlay Settings",
 
 	"manaattributes.client.textureSettings.overlayTextureSettings.offset_x": "X offset from progress",
 	"manaattributes.client.textureSettings.overlayTextureSettings.offset_y": "Y offset from progress",
 
-	"manaattributes.client.textureSettings.overlayTextureSettings.horizontal_width": "Horizontal Width",
-	"manaattributes.client.textureSettings.overlayTextureSettings.horizontal_height": "Horizontal Height",
+	"manaattributes.client.show_icon": "Show icon",
+	"manaattributes.client.show_icon.desc": "An additional HUD element",
 
-	"manaattributes.client.textureSettings.overlayTextureSettings.vertical_width": "Vertical Width",
-	"manaattributes.client.textureSettings.overlayTextureSettings.vertical_height": "Vertical Height",
+	"manaattributes.client.iconTextureSettings": "Icon Settings",
+
+	"manaattributes.client.iconTextureSettings.offset_x": "X offset from origin",
+	"manaattributes.client.iconTextureSettings.offset_y": "Y offset from origin",
 
 	"manaattributes.client.enable_smooth_animation": "Enable smooth animation",
 
