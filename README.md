@@ -8,9 +8,9 @@ LivingEntities can have up to **_generic.max_mana_** amounts of mana. Mana is re
 
 When mana is reduced, regeneration is stopped for **_generic.mana_regeneration_delay_threshold_** ticks.
 
-**_generic.reserved_mana_** describes the percentage amount of maximum mana that is currently not available.
-
 When mana is <= 0, regeneration is stopped for **_generic.depleted_mana_regeneration_delay_threshold_** ticks.
+
+**_generic.reserved_mana_** describes the percentage amount of maximum mana that is currently not available.
 
 ### Default attribute values
 
