@@ -159,7 +159,6 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	public void manaattributes$addMana(float amount) {
 		float f = this.manaattributes$getMana();
 		this.manaattributes$setMana(f + amount);
-		ManaAttributes.LOGGER.info("added "+ amount + " mana");
 		if (amount < 0) {
 			this.manaRegenerationDelayTimer = 0;
 			this.manaTickTimer = 0;
