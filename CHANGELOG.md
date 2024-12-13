@@ -1,3 +1,7 @@
+# 1.6.1
+
+- removed debug log spam
+
 # 1.6.0
 
 HUD rendering overhaul
