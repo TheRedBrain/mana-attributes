@@ -1,3 +1,11 @@
+# 2.7.0
+
+- added alternative mana bar consisting of icons, similar to vanillas resource bars (this first iteration does not yet support multiple icon types per bar, e.g. reserved mana)
+- reworked the "naturalManaRegeneration" game rule (now works with mods that display attribute values)
+- fixed an issue where the mana bar was empty when joining a world for the first time/respawning
+- fixed an issue where the mana bar was visible in creative mode
+- fixed an issue where the mana bar was visible even when the HUD was hidden (pressing F1)
+
 # 2.6.0
 
 HUD rendering overhaul
