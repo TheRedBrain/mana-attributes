@@ -21,7 +21,7 @@ public class ClientEventsRegistry {
 			PlayerEntity playerEntity = minecraftClient.player;
 			ClientConfig clientConfig = ManaAttributesClient.CLIENT_CONFIG;
 
-			if (playerEntity != null) {
+			if (playerEntity != null && !minecraftClient.options.hudHidden) {
 				double mana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMana());
 				double maxMana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMaxMana());
 
