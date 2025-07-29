@@ -47,7 +47,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Inject(method = "initDataTracker", at = @At("RETURN"))
 	protected void manaattributes$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
-		builder.add(MANA, 0.0F);
+		builder.add(MANA, 10.0F);
 	}
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
