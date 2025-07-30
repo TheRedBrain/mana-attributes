@@ -55,8 +55,8 @@ dependencies {
     modImplementation"me.fzzyhmstrs:fzzy_config:${project.fzzy_config_version}"
 
     // Resource Bar API
-//    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
-    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
+    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
+//    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
 
 }
 
