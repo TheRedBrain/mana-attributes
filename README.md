@@ -23,10 +23,9 @@ When mana is <= 0, regeneration is stopped for **_generic.depleted_mana_regenera
 
 ## Customization
 
-When the gamerule "naturalManaRegeneration" is true, players have 1 additional mana regeneration.
+When the game rule "naturalManaRegeneration" is true, players have 1 additional mana regeneration.
 
-The client config allows customizing the HUD element. The details are explained
-in [this wiki article](https://github.com/TheRedBrain/overhauled-damage/wiki/Resource-Bar-Customization).
+The client config allows customizing the HUD element.
 
 ## API
 
