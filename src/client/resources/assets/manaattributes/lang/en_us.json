@@ -88,5 +88,6 @@
 
 	"manaattributes.client.numberSettings.number_color": "Number color",
 
-	"gamerule.naturalManaRegeneration": "Naturally regenerate mana"
+	"gamerule.naturalManaRegeneration": "Naturally regenerate mana",
+	"gamerule.naturalMaximumMana": "Naturally available maximum mana"
 }
