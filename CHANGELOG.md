@@ -1,3 +1,9 @@
+# 2.8.0
+
+- added "naturalMaximumMana" game rule
+- changed default value of "generic.max_mana" to 0
+- reworked the "naturalManaRegeneration" game rule (now is a double value, instead of a boolean)
+
 # 2.7.0
 
 - added alternative mana bar consisting of icons, similar to vanillas resource bars (this first iteration does not yet support multiple icon types per bar, e.g. reserved mana)

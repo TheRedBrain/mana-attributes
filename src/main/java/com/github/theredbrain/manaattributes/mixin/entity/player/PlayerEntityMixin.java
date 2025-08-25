@@ -26,17 +26,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ManaUsin
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		if (this.getServer() != null && this.getWorld().getGameRules().getBoolean(GameRulesRegistry.NATURAL_MANA_REGENERATION)) {
-			this.getAttributes().addTemporaryModifiers(getNaturalManaRegenerationModifier());
-		} else {
-			this.getAttributes().removeModifiers(getNaturalManaRegenerationModifier());
-		}
+		this.getAttributes().addTemporaryModifiers(getNaturalManaModifiers(this.getWorld()));
 	}
 
 	@Unique
-	private HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalManaRegenerationModifier() {
+	private HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalManaModifiers(World world) {
 		HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(ManaAttributes.MANA_REGENERATION, new EntityAttributeModifier(ManaAttributes.identifier("natural_mana_regeneration_modifier"), 1.0, EntityAttributeModifier.Operation.ADD_VALUE));
+		hashMultimap.put(ManaAttributes.MANA_REGENERATION, new EntityAttributeModifier(ManaAttributes.identifier("natural_mana_regeneration_modifier"), world.getGameRules().get(GameRulesRegistry.NATURAL_MANA_REGENERATION).get(), EntityAttributeModifier.Operation.ADD_VALUE));
+		hashMultimap.put(ManaAttributes.MAX_MANA, new EntityAttributeModifier(ManaAttributes.identifier("natural_maximum_mana_modifier"), world.getGameRules().get(GameRulesRegistry.NATURAL_MAXIMUM_MANA).get(), EntityAttributeModifier.Operation.ADD_VALUE));
 		return hashMultimap;
 	}
 }
