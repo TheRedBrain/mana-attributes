@@ -26,7 +26,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ManaUsin
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		this.getAttributes().addTemporaryModifiers(getNaturalManaModifiers(this.getWorld()));
+		if (!this.getWorld().isClient()) {
+			this.getAttributes().addTemporaryModifiers(getNaturalManaModifiers(this.getWorld()));
+		}
 	}
 
 	@Unique

@@ -1,3 +1,7 @@
+# 2.8.1
+
+- fixed game rules
+
 # 2.8.0
 
 - added "naturalMaximumMana" game rule
