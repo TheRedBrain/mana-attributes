@@ -22,4 +22,8 @@ public interface ManaUsingEntity {
 	float manaattributes$getMana();
 
 	void manaattributes$setMana(float mana);
+
+	void manaattributes$setApplyOldMana(boolean applyOldMana);
+
+	void manaattributes$setApplyMaxMana(boolean applyMaxMana);
 }

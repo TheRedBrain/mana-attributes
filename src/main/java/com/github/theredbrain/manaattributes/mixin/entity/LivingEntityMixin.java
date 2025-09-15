@@ -37,6 +37,12 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	private int manaRegenerationDelayTimer = 0;
 	@Unique
 	private boolean delayManaRegeneration = false;
+	@Unique
+	private Float oldMana = null;
+	@Unique
+	private boolean applyOldMana = true;
+	@Unique
+	private boolean applyMaxMana = false;
 
 	@Unique
 	private static final TrackedData<Float> MANA = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -62,8 +68,21 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		;
 	}
 
+	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
+	public void staminaattributes$readCustomDataFromNbt_head(NbtCompound nbt, CallbackInfo ci) {
+		float mana;
+		if (nbt.contains("mana", NbtElement.NUMBER_TYPE)) {
+			mana = nbt.getFloat("mana");
+		} else {
+			mana = Float.MIN_VALUE;
+		}
+		if (mana != Float.MIN_VALUE) {
+			this.oldMana = mana;
+		}
+	}
+
 	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-	public void manaattributes$readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+	public void manaattributes$readCustomDataFromNbt_tail(NbtCompound nbt, CallbackInfo ci) {
 
 		if (nbt.contains("mana", NbtElement.NUMBER_TYPE)) {
 			this.manaattributes$setMana(nbt.getFloat("mana"));
@@ -112,7 +131,18 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 				}
 				this.manaTickTimer = 0;
 			}
-
+		}
+		if (this.applyOldMana) {
+			if (this.applyMaxMana) {
+				this.oldMana = this.manaattributes$getUnreservedMana();
+				this.applyMaxMana = false;
+			}
+			if (this.oldMana != null) {
+				this.manaattributes$setMana(this.oldMana);
+				this.oldMana = null;
+			}
+		} else {
+			this.applyOldMana = true;
 		}
 	}
 
@@ -174,5 +204,15 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	@Override
 	public void manaattributes$setMana(float mana) {
 		this.dataTracker.set(MANA, MathHelper.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
+	}
+
+	@Override
+	public void manaattributes$setApplyOldMana(boolean applyOldMana) {
+		this.applyOldMana = applyOldMana;
+	}
+
+	@Override
+	public void manaattributes$setApplyMaxMana(boolean applyMaxMana) {
+		this.applyMaxMana = applyMaxMana;
 	}
 }
