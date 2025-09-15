@@ -86,8 +86,5 @@
 	"manaattributes.client.numberSettings.number_offset_x": "X offset from origin",
 	"manaattributes.client.numberSettings.number_offset_y": "Y offset from origin",
 
-	"manaattributes.client.numberSettings.number_color": "Number color",
-
-	"gamerule.naturalManaRegeneration": "Naturally regenerate mana",
-	"gamerule.naturalMaximumMana": "Naturally available maximum mana"
+	"manaattributes.client.numberSettings.number_color": "Number color"
 }

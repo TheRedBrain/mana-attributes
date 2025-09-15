@@ -1,6 +1,7 @@
 package com.github.theredbrain.manaattributes;
 
-import com.github.theredbrain.manaattributes.registry.GameRulesRegistry;
+import com.github.theredbrain.manaattributes.config.ServerConfig;
+import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class ManaAttributes implements ModInitializer {
 	public static final String MOD_ID = "manaattributes";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static ServerConfig SERVER_CONFIG;
 
 	public static RegistryEntry<EntityAttribute> MANA_REGENERATION;
 	public static RegistryEntry<EntityAttribute> MAX_MANA;
@@ -22,8 +24,7 @@ public class ManaAttributes implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing mana!");
-
-		GameRulesRegistry.init();
+		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new);
 	}
 
 	public static Identifier identifier(String path) {
