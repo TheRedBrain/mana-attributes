@@ -23,7 +23,7 @@ When mana is <= 0, regeneration is stopped for **_generic.depleted_mana_regenera
 
 ## Customization
 
-When the game rule "naturalManaRegeneration" is true, players have 1 additional mana regeneration.
+The server config has options to set the default value for each attribute. This only affects the attribute values for players, not other entities.
 
 The client config allows customizing the HUD element.
 

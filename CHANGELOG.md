@@ -1,3 +1,9 @@
+# 2.9.0
+
+- replaced game rules with server config options
+- tweaked default client config settings
+- fixed mana bar being empty when joining a world / respawning
+
 # 2.8.1
 
 - fixed game rules
