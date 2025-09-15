@@ -27,9 +27,9 @@ public class ClientConfig extends Config {
 
 	public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.BOTTOM_MIDDLE;
 
-	public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+	public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.RIGHT_TO_LEFT;
 
-	public boolean dynamically_adjust_to_armor_bar = true;
+	public boolean dynamically_adjust_to_armor_bar = false;
 
 	public boolean dynamically_adjust_to_air_bar = true;
 
@@ -37,7 +37,7 @@ public class ClientConfig extends Config {
 
 	public static class IconBarSettings extends ConfigSection {
 		public ValidatedInt offset_x = new ValidatedInt(91);
-		public ValidatedInt offset_y = new ValidatedInt(-49);
+		public ValidatedInt offset_y = new ValidatedInt(-59);
 		public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 		public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 	}
