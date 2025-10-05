@@ -1,3 +1,8 @@
+# 2.9.1
+
+- fixed mana bar being empty when joining a world for the first time
+- bumped various dependency versions
+
 # 2.9.0
 
 - replaced game rules with server config options
