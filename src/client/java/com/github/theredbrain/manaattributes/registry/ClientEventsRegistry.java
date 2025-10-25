@@ -8,6 +8,8 @@ import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.FluidTags;
@@ -24,7 +26,7 @@ public class ClientEventsRegistry {
 	private static final Identifier ICON_MANA_HALF = ManaAttributes.identifier("hud/icon_mana_half");
 
 	public static void initializeClientEvents() {
-		HudRenderCallback.EVENT.register((matrixStack, delta) -> {
+		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, ManaAttributes.identifier("mana"), ((matrixStack, delta) -> {
 			MinecraftClient minecraftClient = MinecraftClient.getInstance();
 			PlayerEntity playerEntity = minecraftClient.player;
 			ClientConfig clientConfig = ManaAttributesClient.CLIENT_CONFIG;
@@ -158,7 +160,7 @@ public class ClientEventsRegistry {
 					}
 				}
 			}
-		});
+		}));
 		ConfigApi.event().onUpdateClient((identifier, config) -> {
 			if (identifier.equals(Identifier.of(ManaAttributes.MOD_ID, "client"))) {
 				ResourceBarAPIClient.clearCache(

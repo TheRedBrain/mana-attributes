@@ -10,9 +10,9 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -68,11 +68,11 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		;
 	}
 
-	@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
-	public void staminaattributes$readCustomDataFromNbt_head(NbtCompound nbt, CallbackInfo ci) {
+	@Inject(method = "readCustomData", at = @At("HEAD"))
+	public void manaattributes$readCustomData_head(ReadView view, CallbackInfo ci) {
 		float mana;
-		if (nbt.contains("mana", NbtElement.NUMBER_TYPE)) {
-			mana = nbt.getFloat("mana");
+		if (view.contains("mana")) {
+			mana = view.getFloat("mana", this.manaattributes$getMaxMana());
 		} else {
 			mana = Float.MIN_VALUE;
 		}
@@ -81,25 +81,25 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		}
 	}
 
-	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-	public void manaattributes$readCustomDataFromNbt_tail(NbtCompound nbt, CallbackInfo ci) {
+	@Inject(method = "readCustomData", at = @At("TAIL"))
+	public void manaattributes$readCustomData_tail(ReadView view, CallbackInfo ci) {
 
-		if (nbt.contains("mana", NbtElement.NUMBER_TYPE)) {
-			this.manaattributes$setMana(nbt.getFloat("mana"));
+		if (view.contains("mana")) {
+			this.manaattributes$setMana(view.getFloat("mana", this.manaattributes$getMaxMana()));
 		}
 
 	}
 
-	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-	public void manaattributes$writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+	@Inject(method = "writeCustomData", at = @At("TAIL"))
+	public void manaattributes$writeCustomData(WriteView view, CallbackInfo ci) {
 
-		nbt.putFloat("mana", this.manaattributes$getMana());
+		view.putFloat("mana", this.manaattributes$getMana());
 
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		if (!this.getWorld().isClient) {
+		if (!this.getEntityWorld().isClient()) {
 
 			this.manaTickTimer++;
 
