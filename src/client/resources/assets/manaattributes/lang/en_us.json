@@ -1,10 +1,10 @@
 {
-	"attribute.name.generic.mana_regeneration": "Mana Regeneration",
-	"attribute.name.generic.max_mana": "Max Mana",
-	"attribute.name.generic.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
-	"attribute.name.generic.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
-	"attribute.name.generic.mana_tick_threshold": "Mana Tick Threshold",
-	"attribute.name.generic.reserved_mana": "Reserved Mana",
+	"attribute.name.mana_regeneration": "Mana Regeneration",
+	"attribute.name.max_mana": "Max Mana",
+	"attribute.name.mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
+	"attribute.name.depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
+	"attribute.name.mana_tick_threshold": "Mana Tick Threshold",
+	"attribute.name.reserved_mana": "Reserved Mana",
 
 	"hud.message.manaTooLow": "Your mana is too low!",
 
