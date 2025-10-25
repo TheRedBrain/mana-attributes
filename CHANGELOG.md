@@ -1,3 +1,17 @@
+# 3.0.0
+
+- updated to 1.21.10
+
+## Additions
+
+## Changes
+
+- removed "generic." prefix from all entity attributes, following vanillas example
+
+## Fixes
+
+- fixed wrong server config name. Sorry for the inconvenience this might have caused!
+
 # 2.9.1
 
 - fixed mana bar being empty when joining a world for the first time
