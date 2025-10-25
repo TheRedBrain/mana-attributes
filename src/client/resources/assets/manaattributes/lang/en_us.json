@@ -86,5 +86,14 @@
 	"manaattributes.client.numberSettings.number_offset_x": "X offset from origin",
 	"manaattributes.client.numberSettings.number_offset_y": "Y offset from origin",
 
-	"manaattributes.client.numberSettings.number_color": "Number color"
+	"manaattributes.client.numberSettings.number_color": "Number color",
+	
+	"manaattributes.server": "Server Side Settings",
+
+	"manaattributes.server.natural_mana_regeneration": "Mana Regeneration",
+	"manaattributes.server.natural_max_mana": "Maximum Mana",
+	"manaattributes.server.natural_mana_regeneration_delay_threshold": "Mana Regeneration Delay Threshold",
+	"manaattributes.server.natural_depleted_mana_regeneration_delay_threshold": "Depleted Mana Regeneration Delay Threshold",
+	"manaattributes.server.natural_mana_tick_threshold": "Mana Tick Threshold",
+	"manaattributes.server.natural_reserved_mana": "Reserved Mana"
 }
