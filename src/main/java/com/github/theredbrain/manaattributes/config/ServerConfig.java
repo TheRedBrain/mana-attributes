@@ -4,7 +4,7 @@ import com.github.theredbrain.manaattributes.ManaAttributes;
 import me.fzzyhmstrs.fzzy_config.annotations.ConvertFrom;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 
-@ConvertFrom(fileName = "server.json5", folder = "staminaattributes")
+@ConvertFrom(fileName = "server.json5", folder = "manaattributes")
 public class ServerConfig extends Config {
 
 	public ServerConfig() {
