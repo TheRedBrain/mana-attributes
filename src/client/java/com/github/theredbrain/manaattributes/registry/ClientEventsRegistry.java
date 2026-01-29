@@ -7,14 +7,13 @@ import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.ArrayList;
@@ -27,21 +26,21 @@ public class ClientEventsRegistry {
 
 	public static void initializeClientEvents() {
 		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, ManaAttributes.identifier("mana"), ((matrixStack, delta) -> {
-			MinecraftClient minecraftClient = MinecraftClient.getInstance();
-			PlayerEntity playerEntity = minecraftClient.player;
+			Minecraft minecraftClient = Minecraft.getInstance();
+			LocalPlayer localPlayer = minecraftClient.player;
 			ClientConfig clientConfig = ManaAttributesClient.CLIENT_CONFIG;
 
-			if (playerEntity != null && !minecraftClient.options.hudHidden) {
-				double mana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMana());
-				double maxMana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getMaxMana());
-				double unreservedMana = MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getUnreservedMana());
+			if (localPlayer != null && !minecraftClient.options.hideGui) {
+				double mana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMana());
+				double maxMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMaxMana());
+				double unreservedMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getUnreservedMana());
 
-				if (!playerEntity.isCreative() && maxMana > 0) {
+				if (!localPlayer.isCreative() && maxMana > 0) {
 
-					int u = playerEntity.getMaxAir();
-					int v = Math.min(playerEntity.getAir(), u);
-					int air_offset = clientConfig.dynamically_adjust_to_air_bar && playerEntity.isSubmergedIn(FluidTags.WATER) || v < u ? 10 : 0;
-					int armor_offset = clientConfig.dynamically_adjust_to_armor_bar && playerEntity.getArmor() > 0 ? 10 : 0;
+					int u = localPlayer.getMaxAirSupply();
+					int v = Math.min(localPlayer.getAirSupply(), u);
+					int air_offset = clientConfig.dynamically_adjust_to_air_bar && localPlayer.isEyeInFluid(FluidTags.WATER) || v < u ? 10 : 0;
+					int armor_offset = clientConfig.dynamically_adjust_to_armor_bar && localPlayer.getArmorValue() > 0 ? 10 : 0;
 
 					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.origin);
 
@@ -88,18 +87,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"),
-										Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_background.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_progress.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_reserved.png"),
+										ManaAttributes.identifier("textures/gui/sprites/hud/horizontal_mana_overlay.png"),
 										null
 								},
 								mana,
 								maxMana,
-								MathHelper.ceil(((ManaUsingEntity) playerEntity).manaattributes$getRegeneratedMana()),
+								Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getRegeneratedMana()),
 								unreservedMana,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -144,7 +143,7 @@ public class ClientEventsRegistry {
 					if (clientConfig.numberSettings.show_number && (mana < maxMana || clientConfig.numberSettings.show_when_mana_full)) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								RESOURCE_BAR_IDENTIFIER_STRING,
 								mana,
@@ -162,7 +161,7 @@ public class ClientEventsRegistry {
 			}
 		}));
 		ConfigApi.event().onUpdateClient((identifier, config) -> {
-			if (identifier.equals(Identifier.of(ManaAttributes.MOD_ID, "client"))) {
+			if (identifier.equals(Identifier.fromNamespaceAndPath(ManaAttributes.MOD_ID, "client"))) {
 				ResourceBarAPIClient.clearCache(
 						RESOURCE_BAR_IDENTIFIER_STRING,
 						new double[]{
@@ -183,13 +182,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"),
-								Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"),
+								Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"),
 								null
 						}
 				);

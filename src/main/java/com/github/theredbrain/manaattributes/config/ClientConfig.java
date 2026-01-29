@@ -11,8 +11,7 @@ import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 
 @ConvertFrom(fileName = "client.json5", folder = "manaattributes")
@@ -75,7 +74,7 @@ public class ClientConfig extends Config {
 				}}, new ValidatedInt(), new ValidatedInt());
 
 				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_background.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 			}
@@ -96,22 +95,22 @@ public class ClientConfig extends Config {
 
 				@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_decrease_animation.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_animation.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress_increase_value.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				@Translation(prefix = "manaattributes.client.texture_layer", negate = true)
 				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_progress.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 			}
@@ -131,7 +130,7 @@ public class ClientConfig extends Config {
 				}}, new ValidatedInt(), new ValidatedInt());
 
 				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_reserved.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 			}
@@ -153,7 +152,7 @@ public class ClientConfig extends Config {
 				}}, new ValidatedInt(), new ValidatedInt());
 
 				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-					put(0, Identifier.of("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"));
+					put(0, Identifier.fromNamespaceAndPath("manaattributes", "textures/gui/sprites/hud/horizontal_mana_overlay.png"));
 				}}, new ValidatedInt(), new ValidatedIdentifier());
 
 			}

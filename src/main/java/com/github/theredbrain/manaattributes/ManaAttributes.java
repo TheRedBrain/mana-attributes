@@ -3,9 +3,9 @@ package com.github.theredbrain.manaattributes;
 import com.github.theredbrain.manaattributes.config.ServerConfig;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,12 +14,12 @@ public class ManaAttributes implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static ServerConfig SERVER_CONFIG;
 
-	public static RegistryEntry<EntityAttribute> MANA_REGENERATION;
-	public static RegistryEntry<EntityAttribute> MAX_MANA;
-	public static RegistryEntry<EntityAttribute> MANA_REGENERATION_DELAY_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> MANA_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> RESERVED_MANA;
+	public static Holder<Attribute> MANA_REGENERATION;
+	public static Holder<Attribute> MAX_MANA;
+	public static Holder<Attribute> MANA_REGENERATION_DELAY_THRESHOLD;
+	public static Holder<Attribute> DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD;
+	public static Holder<Attribute> MANA_TICK_THRESHOLD;
+	public static Holder<Attribute> RESERVED_MANA;
 
 	@Override
 	public void onInitialize() {
@@ -28,6 +28,6 @@ public class ManaAttributes implements ModInitializer {
 	}
 
 	public static Identifier identifier(String path) {
-		return Identifier.of(MOD_ID, path);
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 }

@@ -2,19 +2,19 @@ package com.github.theredbrain.manaattributes.mixin.entity;
 
 import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin extends Entity implements ManaUsingEntity {
 
 	@Shadow
-	public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
+	public abstract double getAttributeValue(Holder<Attribute> attribute);
 
 	@Unique
 	private int manaTickTimer = 0;
@@ -45,19 +45,19 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	private boolean applyMaxMana = false;
 
 	@Unique
-	private static final TrackedData<Float> MANA = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> MANA = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
-	public LivingEntityMixin(EntityType<?> type, World world) {
+	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 
-	@Inject(method = "initDataTracker", at = @At("RETURN"))
-	protected void manaattributes$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
-		builder.add(MANA, 10.0F);
+	@Inject(method = "defineSynchedData", at = @At("RETURN"))
+	protected void manaattributes$initDataTracker(SynchedEntityData.Builder builder, CallbackInfo ci) {
+		builder.define(MANA, 10.0F);
 	}
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
-	private static void manaattributes$createLivingAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
+	private static void manaattributes$createLivingAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
 		cir.getReturnValue()
 				.add(ManaAttributes.MANA_REGENERATION)
 				.add(ManaAttributes.MAX_MANA)
@@ -68,11 +68,11 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		;
 	}
 
-	@Inject(method = "readCustomData", at = @At("HEAD"))
-	public void manaattributes$readCustomData_head(ReadView view, CallbackInfo ci) {
+	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
+	public void manaattributes$readCustomData_head(ValueInput view, CallbackInfo ci) {
 		float mana;
 		if (view.contains("mana")) {
-			mana = view.getFloat("mana", this.manaattributes$getMaxMana());
+			mana = view.getFloatOr("mana", this.manaattributes$getMaxMana());
 		} else {
 			mana = Float.MIN_VALUE;
 		}
@@ -81,17 +81,17 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		}
 	}
 
-	@Inject(method = "readCustomData", at = @At("TAIL"))
-	public void manaattributes$readCustomData_tail(ReadView view, CallbackInfo ci) {
+	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+	public void manaattributes$readCustomData_tail(ValueInput view, CallbackInfo ci) {
 
 		if (view.contains("mana")) {
-			this.manaattributes$setMana(view.getFloat("mana", this.manaattributes$getMaxMana()));
+			this.manaattributes$setMana(view.getFloatOr("mana", this.manaattributes$getMaxMana()));
 		}
 
 	}
 
-	@Inject(method = "writeCustomData", at = @At("TAIL"))
-	public void manaattributes$writeCustomData(WriteView view, CallbackInfo ci) {
+	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+	public void manaattributes$writeCustomData(ValueOutput view, CallbackInfo ci) {
 
 		view.putFloat("mana", this.manaattributes$getMana());
 
@@ -99,7 +99,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		if (!this.getEntityWorld().isClient()) {
+		if (!this.level().isClientSide()) {
 
 			this.manaTickTimer++;
 
@@ -198,12 +198,12 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Override
 	public float manaattributes$getMana() {
-		return this.dataTracker.get(MANA);
+		return this.entityData.get(MANA);
 	}
 
 	@Override
 	public void manaattributes$setMana(float mana) {
-		this.dataTracker.set(MANA, MathHelper.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
+		this.entityData.set(MANA, Mth.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
 	}
 
 	@Override
