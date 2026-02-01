@@ -34,7 +34,11 @@ public interface ManaUsingEntity {
 
 	float manaattributes$getReservedMana();
 
+	float manaattributes$getMana();
+
 	void manaattributes$addMana(float amount);
+
+	void manaattributes$setMana(float amount);
 
 	boolean manaattributes$delayMaxValueApplication();
 

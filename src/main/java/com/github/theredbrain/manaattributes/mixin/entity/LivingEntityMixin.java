@@ -5,6 +5,7 @@ import com.github.theredbrain.manaattributes.entity.DataAttachmentHelper;
 import com.github.theredbrain.manaattributes.entity.LivingEntityHelper;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import net.minecraft.core.Holder;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -132,13 +133,22 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	}
 
 	@Override
+	public float manaattributes$getMana() {
+		return DataAttachmentHelper.getMana((LivingEntity) (Object) this);
+	}
+
+	@Override
 	public void manaattributes$addMana(float amount) {
-		float f = DataAttachmentHelper.getMana((LivingEntity) (Object) this);
-		DataAttachmentHelper.setMana((LivingEntity) (Object) this, f + amount);
+		this.manaattributes$setMana(this.manaattributes$getMana() + amount);
 		if (amount < 0) {
 			this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayTimer();
 			this.manaTickTimer = 0;
 		}
+	}
+
+	@Override
+	public void manaattributes$setMana(float amount) {
+		DataAttachmentHelper.setMana((LivingEntity) (Object) this, (float) Mth.clamp(amount, 0.0, this.manaattributes$getUnreservedMana()));
 	}
 
 	@Override

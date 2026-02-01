@@ -13,7 +13,7 @@ public class LivingEntityHelper {
 			int manaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayTimer();
 			boolean delayManaRegeneration = ((ManaUsingEntity) livingEntity).manaattributes$delayManaRegeneration();
 
-			double mana = DataAttachmentHelper.getMana(livingEntity);
+			double mana = ((ManaUsingEntity) livingEntity).manaattributes$getMana();
 
 			manaTickTimer++;
 
@@ -41,7 +41,7 @@ public class LivingEntityHelper {
 					((ManaUsingEntity) livingEntity).manaattributes$addMana(((ManaUsingEntity) livingEntity).manaattributes$getRegeneratedMana());
 				}
 				if (mana > ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana()) {
-					DataAttachmentHelper.setMana(livingEntity, ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
+					((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
 				}
 				manaTickTimer = 0;
 			}
@@ -52,7 +52,7 @@ public class LivingEntityHelper {
 			((ManaUsingEntity) livingEntity).manaattributes$setDelayManaRegeneration(delayManaRegeneration);
 		}
 		if (((ManaUsingEntity) livingEntity).manaattributes$delayedMaxValueApplication()) {
-			DataAttachmentHelper.setMana(livingEntity, ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
+			((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
 			((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(false);
 		}
 		if (((ManaUsingEntity) livingEntity).manaattributes$delayMaxValueApplication()) {
