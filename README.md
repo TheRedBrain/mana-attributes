@@ -14,7 +14,7 @@ When mana is <= 0, regeneration is stopped for **_depleted_mana_regeneration_del
 
 ### Default attribute values
 
-- **_max_mana_**: 10
+- **_max_mana_**: 0
 - **_mana_regeneration_**: 0
 - **_mana_tick_threshold_**: 20
 - **_mana_regeneration_delay_threshold_**: 20

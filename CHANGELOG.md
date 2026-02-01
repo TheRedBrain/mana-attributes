@@ -1,3 +1,16 @@
+# 3.1.0
+
+- updated to 1.21.11
+
+## Changes
+
+- regeneration delay timers no longer apply when joining a world
+
+## Technical
+
+- migrated to Mojang Mappings
+- replace synced data with a data attachment, following the best practice for custom entity data
+
 # 3.0.0
 
 - updated to 1.21.10
