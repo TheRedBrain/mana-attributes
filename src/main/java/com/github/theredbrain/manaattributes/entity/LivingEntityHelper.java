@@ -18,24 +18,24 @@ public class LivingEntityHelper {
 			manaTickTimer++;
 
 			if (mana <= 0 && delayManaRegeneration) {
-				depletedManaRegenerationDelayTimer = 0;
-				manaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold();
+				depletedManaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold();
+				manaRegenerationDelayTimer = 0;
 				delayManaRegeneration = false;
 			}
 			if (mana > 0 && !delayManaRegeneration) {
 				delayManaRegeneration = true;
 			}
-			if (depletedManaRegenerationDelayTimer <= ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()) {
-				depletedManaRegenerationDelayTimer++;
+			if (depletedManaRegenerationDelayTimer > ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()) {
+				depletedManaRegenerationDelayTimer--;
 			}
-			if (manaRegenerationDelayTimer <= ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold()) {
-				manaRegenerationDelayTimer++;
+			if (manaRegenerationDelayTimer > ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold()) {
+				manaRegenerationDelayTimer--;
 			}
 
 			if (
 					manaTickTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getManaTickThreshold()
-							&& manaRegenerationDelayTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold()
-							&& depletedManaRegenerationDelayTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()
+							&& manaRegenerationDelayTimer <= 0
+							&& depletedManaRegenerationDelayTimer <= 0
 			) {
 				if (mana < ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana() || ((ManaUsingEntity) livingEntity).manaattributes$getRegeneratedMana() < 0) {
 					((ManaUsingEntity) livingEntity).manaattributes$addMana(((ManaUsingEntity) livingEntity).manaattributes$getRegeneratedMana());

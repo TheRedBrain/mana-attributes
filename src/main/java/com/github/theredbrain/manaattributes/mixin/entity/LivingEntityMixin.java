@@ -136,7 +136,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		float f = DataAttachmentHelper.getMana((LivingEntity) (Object) this);
 		DataAttachmentHelper.setMana((LivingEntity) (Object) this, f + amount);
 		if (amount < 0) {
-			this.manaRegenerationDelayTimer = 0;
+			this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayTimer();
 			this.manaTickTimer = 0;
 		}
 	}
