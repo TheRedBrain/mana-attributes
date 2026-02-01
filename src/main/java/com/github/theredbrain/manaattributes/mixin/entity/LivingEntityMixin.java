@@ -1,6 +1,7 @@
 package com.github.theredbrain.manaattributes.mixin.entity;
 
 import com.github.theredbrain.manaattributes.ManaAttributes;
+import com.github.theredbrain.manaattributes.entity.LivingEntityHelper;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import net.minecraft.core.Holder;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -99,51 +100,39 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		if (!this.level().isClientSide()) {
+		LivingEntityHelper.tick(((LivingEntity)(Object)this));
+	}
 
-			this.manaTickTimer++;
+	public int manaattributes$getManaTickTimer() {
+		return this.manaTickTimer;
+	}
 
-			if (this.manaattributes$getMana() <= 0 && this.delayManaRegeneration) {
-				this.depletedManaRegenerationDelayTimer = 0;
-				this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayThreshold();
-				this.delayManaRegeneration = false;
-			}
-			if (this.manaattributes$getMana() > 0 && !this.delayManaRegeneration) {
-				this.delayManaRegeneration = true;
-			}
-			if (this.depletedManaRegenerationDelayTimer <= this.manaattributes$getDepletedManaRegenerationDelayThreshold()) {
-				this.depletedManaRegenerationDelayTimer++;
-			}
-			if (this.manaRegenerationDelayTimer <= this.manaattributes$getManaRegenerationDelayThreshold()) {
-				this.manaRegenerationDelayTimer++;
-			}
+	public void manaattributes$setManaTickTimer(int manaTickTimer) {
+		this.manaTickTimer = manaTickTimer;
+	}
 
-			if (
-					this.manaTickTimer >= this.manaattributes$getManaTickThreshold()
-							&& this.manaRegenerationDelayTimer >= this.manaattributes$getManaRegenerationDelayThreshold()
-							&& this.depletedManaRegenerationDelayTimer >= this.manaattributes$getDepletedManaRegenerationDelayThreshold()
-			) {
-				if (this.manaattributes$getMana() < this.manaattributes$getUnreservedMana() || this.manaattributes$getRegeneratedMana() < 0) {
-					((ManaUsingEntity) this).manaattributes$addMana(this.manaattributes$getRegeneratedMana());
-				}
-				if (this.manaattributes$getMana() > this.manaattributes$getUnreservedMana()) {
-					this.manaattributes$setMana(this.manaattributes$getUnreservedMana());
-				}
-				this.manaTickTimer = 0;
-			}
-		}
-		if (this.applyOldMana) {
-			if (this.applyMaxMana) {
-				this.oldMana = this.manaattributes$getUnreservedMana();
-				this.applyMaxMana = false;
-			}
-			if (this.oldMana != null) {
-				this.manaattributes$setMana(this.oldMana);
-				this.oldMana = null;
-			}
-		} else {
-			this.applyOldMana = true;
-		}
+	public int manaattributes$getDepletedManaRegenerationDelayTimer() {
+		return this.depletedManaRegenerationDelayTimer;
+	}
+
+	public void manaattributes$setDepletedManaRegenerationDelayTimer(int depletedManaRegenerationDelayTimer) {
+		this.depletedManaRegenerationDelayTimer = depletedManaRegenerationDelayTimer;
+	}
+
+	public int manaattributes$getManaRegenerationDelayTimer() {
+		return this.manaRegenerationDelayTimer;
+	}
+
+	public void manaattributes$setManaRegenerationDelayTimer(int manaRegenerationDelayTimer) {
+		this.manaRegenerationDelayTimer = manaRegenerationDelayTimer;
+	}
+
+	public boolean manaattributes$delayManaRegeneration() {
+		return this.delayManaRegeneration;
+	}
+
+	public void manaattributes$setDelayManaRegeneration(boolean delayManaRegeneration) {
+		this.delayManaRegeneration = delayManaRegeneration;
 	}
 
 	@Override
@@ -206,9 +195,27 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		this.entityData.set(MANA, Mth.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
 	}
 
+	public Float manaattributes$getOldMana() {
+		return this.oldMana;
+	}
+
+	public void manaattributes$setOldMana(Float oldMana) {
+		this.oldMana = oldMana;
+	}
+
+	@Override
+	public boolean manaattributes$applyOldMana() {
+		return this.applyOldMana;
+	}
+
 	@Override
 	public void manaattributes$setApplyOldMana(boolean applyOldMana) {
 		this.applyOldMana = applyOldMana;
+	}
+
+	@Override
+	public boolean manaattributes$applyMaxMana() {
+		return this.applyMaxMana;
 	}
 
 	@Override
