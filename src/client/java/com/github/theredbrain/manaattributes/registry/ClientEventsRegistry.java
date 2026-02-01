@@ -3,6 +3,7 @@ package com.github.theredbrain.manaattributes.registry;
 import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.manaattributes.ManaAttributesClient;
 import com.github.theredbrain.manaattributes.config.ClientConfig;
+import com.github.theredbrain.manaattributes.entity.DataAttachmentHelper;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
@@ -31,7 +32,7 @@ public class ClientEventsRegistry {
 			ClientConfig clientConfig = ManaAttributesClient.CLIENT_CONFIG;
 
 			if (localPlayer != null && !minecraftClient.options.hideGui) {
-				double mana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMana());
+				double mana = Mth.ceil(DataAttachmentHelper.getMana(localPlayer));
 				double maxMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMaxMana());
 				double unreservedMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getUnreservedMana());
 

@@ -14,7 +14,7 @@ public class PlayerManagerMixin {
 
 	@Inject(method = "respawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;setHealth(F)V"))
 	protected void manaattributes$respawnPlayer(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
-		((ManaUsingEntity) player).manaattributes$setApplyMaxMana(true);
+		((ManaUsingEntity) player).manaattributes$setDelayMaxValueApplication(true);
 	}
 
 }

@@ -36,19 +36,11 @@ public interface ManaUsingEntity {
 
 	void manaattributes$addMana(float amount);
 
-	float manaattributes$getMana();
+	boolean manaattributes$delayMaxValueApplication();
 
-	void manaattributes$setMana(float mana);
+	void manaattributes$setDelayMaxValueApplication(boolean delayMaxValueApplication);
 
-	Float manaattributes$getOldMana();
+	boolean manaattributes$delayedMaxValueApplication();
 
-	void manaattributes$setOldMana(Float mana);
-
-	void manaattributes$setApplyOldMana(boolean applyOldMana);
-
-	boolean manaattributes$applyOldMana();
-
-	void manaattributes$setApplyMaxMana(boolean applyMaxMana);
-
-	boolean manaattributes$applyMaxMana();
+	void manaattributes$setDelayedMaxValueApplication(boolean delayedMaxValueApplication);
 }

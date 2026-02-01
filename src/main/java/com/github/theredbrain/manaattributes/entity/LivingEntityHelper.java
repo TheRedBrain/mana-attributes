@@ -1,6 +1,5 @@
 package com.github.theredbrain.manaattributes.entity;
 
-import com.github.theredbrain.manaattributes.ManaAttributes;
 import net.minecraft.world.entity.LivingEntity;
 
 public class LivingEntityHelper {
@@ -14,35 +13,35 @@ public class LivingEntityHelper {
 			int manaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayTimer();
 			boolean delayManaRegeneration = ((ManaUsingEntity) livingEntity).manaattributes$delayManaRegeneration();
 
-			double mana = ((ManaUsingEntity) livingEntity).manaattributes$getMana();
+			double mana = DataAttachmentHelper.getMana(livingEntity);
 
 			manaTickTimer++;
 
 			if (mana <= 0 && delayManaRegeneration) {
 				depletedManaRegenerationDelayTimer = 0;
-				manaRegenerationDelayTimer = ((ManaUsingEntity)livingEntity).manaattributes$getManaRegenerationDelayThreshold();
+				manaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold();
 				delayManaRegeneration = false;
 			}
 			if (mana > 0 && !delayManaRegeneration) {
 				delayManaRegeneration = true;
 			}
-			if (depletedManaRegenerationDelayTimer <= ((ManaUsingEntity)livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()) {
+			if (depletedManaRegenerationDelayTimer <= ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()) {
 				depletedManaRegenerationDelayTimer++;
 			}
-			if (manaRegenerationDelayTimer <= ((ManaUsingEntity)livingEntity).manaattributes$getManaRegenerationDelayThreshold()) {
+			if (manaRegenerationDelayTimer <= ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold()) {
 				manaRegenerationDelayTimer++;
 			}
 
 			if (
-					manaTickTimer >= ((ManaUsingEntity)livingEntity).manaattributes$getManaTickThreshold()
-							&& manaRegenerationDelayTimer >= ((ManaUsingEntity)livingEntity).manaattributes$getManaRegenerationDelayThreshold()
-							&& depletedManaRegenerationDelayTimer >= ((ManaUsingEntity)livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()
+					manaTickTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getManaTickThreshold()
+							&& manaRegenerationDelayTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getManaRegenerationDelayThreshold()
+							&& depletedManaRegenerationDelayTimer >= ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayThreshold()
 			) {
-				if (mana < ((ManaUsingEntity)livingEntity).manaattributes$getUnreservedMana() || ((ManaUsingEntity)livingEntity).manaattributes$getRegeneratedMana() < 0) {
-					((ManaUsingEntity) ((ManaUsingEntity)livingEntity)).manaattributes$addMana(((ManaUsingEntity)livingEntity).manaattributes$getRegeneratedMana());
+				if (mana < ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana() || ((ManaUsingEntity) livingEntity).manaattributes$getRegeneratedMana() < 0) {
+					((ManaUsingEntity) livingEntity).manaattributes$addMana(((ManaUsingEntity) livingEntity).manaattributes$getRegeneratedMana());
 				}
-				if (mana > ((ManaUsingEntity)livingEntity).manaattributes$getUnreservedMana()) {
-					((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
+				if (mana > ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana()) {
+					DataAttachmentHelper.setMana(livingEntity, ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
 				}
 				manaTickTimer = 0;
 			}
@@ -52,17 +51,13 @@ public class LivingEntityHelper {
 			((ManaUsingEntity) livingEntity).manaattributes$setManaRegenerationDelayTimer(manaRegenerationDelayTimer);
 			((ManaUsingEntity) livingEntity).manaattributes$setDelayManaRegeneration(delayManaRegeneration);
 		}
-		if (((ManaUsingEntity) livingEntity).manaattributes$applyOldMana()) {
-			if (((ManaUsingEntity) livingEntity).manaattributes$applyMaxMana()) {
-				((ManaUsingEntity) livingEntity).manaattributes$setOldMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
-				((ManaUsingEntity) livingEntity).manaattributes$setApplyMaxMana(false);
-			}
-			if (((ManaUsingEntity) livingEntity).manaattributes$getOldMana() != null) {
-				((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getOldMana());
-				((ManaUsingEntity) livingEntity).manaattributes$setOldMana(null);
-			}
-		} else {
-			((ManaUsingEntity) livingEntity).manaattributes$setApplyOldMana(true);
+		if (((ManaUsingEntity) livingEntity).manaattributes$delayedMaxValueApplication()) {
+			DataAttachmentHelper.setMana(livingEntity, ((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
+			((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(false);
+		}
+		if (((ManaUsingEntity) livingEntity).manaattributes$delayMaxValueApplication()) {
+			((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(true);
+			((ManaUsingEntity) livingEntity).manaattributes$setDelayMaxValueApplication(false);
 		}
 	}
 }

@@ -25,9 +25,8 @@ public abstract class ServerPlayerEntityMixin extends Player implements ManaUsin
 
 	@Inject(method = "initInventoryMenu", at = @At("TAIL"))
 	public void manaattributes$onSpawn(CallbackInfo ci) {
-		this.manaattributes$setApplyOldMana(false);
 		if (this.getStats().getValue(Stats.CUSTOM.get(Stats.LEAVE_GAME)) <= 0) {
-			this.manaattributes$setApplyMaxMana(true);
+			this.manaattributes$setDelayMaxValueApplication(true);
 		}
 	}
 

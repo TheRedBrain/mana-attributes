@@ -1,21 +1,16 @@
 package com.github.theredbrain.manaattributes.mixin.entity;
 
 import com.github.theredbrain.manaattributes.ManaAttributes;
+import com.github.theredbrain.manaattributes.entity.DataAttachmentHelper;
 import com.github.theredbrain.manaattributes.entity.LivingEntityHelper;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import net.minecraft.core.Holder;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,22 +34,12 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	@Unique
 	private boolean delayManaRegeneration = false;
 	@Unique
-	private Float oldMana = null;
+	private boolean delayMaxValueApplication = false;
 	@Unique
-	private boolean applyOldMana = true;
-	@Unique
-	private boolean applyMaxMana = false;
-
-	@Unique
-	private static final EntityDataAccessor<Float> MANA = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
+	private boolean delayedMaxValueApplication = false;
 
 	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
-	}
-
-	@Inject(method = "defineSynchedData", at = @At("RETURN"))
-	protected void manaattributes$initDataTracker(SynchedEntityData.Builder builder, CallbackInfo ci) {
-		builder.define(MANA, 10.0F);
 	}
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
@@ -69,38 +54,9 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 		;
 	}
 
-	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
-	public void manaattributes$readCustomData_head(ValueInput view, CallbackInfo ci) {
-		float mana;
-		if (view.contains("mana")) {
-			mana = view.getFloatOr("mana", this.manaattributes$getMaxMana());
-		} else {
-			mana = Float.MIN_VALUE;
-		}
-		if (mana != Float.MIN_VALUE) {
-			this.oldMana = mana;
-		}
-	}
-
-	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-	public void manaattributes$readCustomData_tail(ValueInput view, CallbackInfo ci) {
-
-		if (view.contains("mana")) {
-			this.manaattributes$setMana(view.getFloatOr("mana", this.manaattributes$getMaxMana()));
-		}
-
-	}
-
-	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-	public void manaattributes$writeCustomData(ValueOutput view, CallbackInfo ci) {
-
-		view.putFloat("mana", this.manaattributes$getMana());
-
-	}
-
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void manaattributes$tick(CallbackInfo ci) {
-		LivingEntityHelper.tick(((LivingEntity)(Object)this));
+		LivingEntityHelper.tick(((LivingEntity) (Object) this));
 	}
 
 	public int manaattributes$getManaTickTimer() {
@@ -177,8 +133,8 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 
 	@Override
 	public void manaattributes$addMana(float amount) {
-		float f = this.manaattributes$getMana();
-		this.manaattributes$setMana(f + amount);
+		float f = DataAttachmentHelper.getMana((LivingEntity) (Object) this);
+		DataAttachmentHelper.setMana((LivingEntity) (Object) this, f + amount);
 		if (amount < 0) {
 			this.manaRegenerationDelayTimer = 0;
 			this.manaTickTimer = 0;
@@ -186,40 +142,22 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	}
 
 	@Override
-	public float manaattributes$getMana() {
-		return this.entityData.get(MANA);
+	public boolean manaattributes$delayMaxValueApplication() {
+		return this.delayMaxValueApplication;
 	}
 
 	@Override
-	public void manaattributes$setMana(float mana) {
-		this.entityData.set(MANA, Mth.clamp(mana, 0, this.manaattributes$getUnreservedMana()));
-	}
-
-	public Float manaattributes$getOldMana() {
-		return this.oldMana;
-	}
-
-	public void manaattributes$setOldMana(Float oldMana) {
-		this.oldMana = oldMana;
+	public void manaattributes$setDelayMaxValueApplication(boolean delayMaxValueApplication) {
+		this.delayMaxValueApplication = delayMaxValueApplication;
 	}
 
 	@Override
-	public boolean manaattributes$applyOldMana() {
-		return this.applyOldMana;
+	public boolean manaattributes$delayedMaxValueApplication() {
+		return this.delayedMaxValueApplication;
 	}
 
 	@Override
-	public void manaattributes$setApplyOldMana(boolean applyOldMana) {
-		this.applyOldMana = applyOldMana;
-	}
-
-	@Override
-	public boolean manaattributes$applyMaxMana() {
-		return this.applyMaxMana;
-	}
-
-	@Override
-	public void manaattributes$setApplyMaxMana(boolean applyMaxMana) {
-		this.applyMaxMana = applyMaxMana;
+	public void manaattributes$setDelayedMaxValueApplication(boolean delayedMaxValueApplication) {
+		this.delayedMaxValueApplication = delayedMaxValueApplication;
 	}
 }
