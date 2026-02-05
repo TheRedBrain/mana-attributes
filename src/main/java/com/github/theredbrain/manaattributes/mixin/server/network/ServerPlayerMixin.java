@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerEntityMixin extends Player implements ManaUsingEntity {
+public abstract class ServerPlayerMixin extends Player implements ManaUsingEntity {
 
-	public ServerPlayerEntityMixin(Level world, GameProfile profile) {
+	public ServerPlayerMixin(Level world, GameProfile profile) {
 		super(world, profile);
 	}
 

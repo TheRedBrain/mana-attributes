@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Attributes.class)
-public class EntityAttributesMixin {
+public class AttributesMixin {
 	static {
 		ManaAttributes.MANA_REGENERATION = Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, ManaAttributes.identifier("mana_regeneration"), new RangedAttribute("attribute.name.mana_regeneration", 0.0, -1024.0, 1024.0).setSyncable(true));
 		ManaAttributes.MAX_MANA = Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, ManaAttributes.identifier("max_mana"), new RangedAttribute("attribute.name.max_mana", 0.0, 0.0, 1024.0).setSyncable(true));
