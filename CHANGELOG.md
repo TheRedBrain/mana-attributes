@@ -3,6 +3,12 @@
 ## Additions
 
 - readded API methods to set and get current mana
+- added "manaattributes:add_mana" enchantment effect
+
+## Fixes
+
+- fixed mana for players on respawn/joining a world
+- fixed regeneration delayW
 
 # 3.1.0
 

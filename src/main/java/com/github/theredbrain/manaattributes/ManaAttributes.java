@@ -2,6 +2,7 @@ package com.github.theredbrain.manaattributes;
 
 import com.github.theredbrain.manaattributes.config.ServerConfig;
 import com.github.theredbrain.manaattributes.registry.DataAttachmentRegistry;
+import com.github.theredbrain.manaattributes.registry.EnchantmentEntityEffectRegistry;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Holder;
@@ -28,6 +29,7 @@ public class ManaAttributes implements ModInitializer {
 		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new);
 
 		DataAttachmentRegistry.init();
+		EnchantmentEntityEffectRegistry.init();
 	}
 
 	public static void info(String message) {
