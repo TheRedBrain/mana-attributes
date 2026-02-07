@@ -1,3 +1,9 @@
+# 3.2.0
+
+## Additions
+
+- readded API methods to set and get current mana
+
 # 3.1.0
 
 - updated to 1.21.11

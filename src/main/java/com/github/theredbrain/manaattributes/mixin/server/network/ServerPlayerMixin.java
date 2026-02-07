@@ -25,6 +25,7 @@ public abstract class ServerPlayerMixin extends Player implements ManaUsingEntit
 
 	@Inject(method = "initInventoryMenu", at = @At("TAIL"))
 	public void manaattributes$onSpawn(CallbackInfo ci) {
+		this.manaattributes$setDelayManaTick(false);
 		if (this.getStats().getValue(Stats.CUSTOM.get(Stats.LEAVE_GAME)) <= 0) {
 			this.manaattributes$setDelayMaxValueApplication(true);
 		}

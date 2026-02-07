@@ -35,6 +35,8 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	@Unique
 	private boolean delayManaRegeneration = false;
 	@Unique
+	private boolean delayManaTick = false;
+	@Unique
 	private boolean delayMaxValueApplication = false;
 	@Unique
 	private boolean delayedMaxValueApplication = false;
@@ -141,7 +143,7 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	public void manaattributes$addMana(float amount) {
 		this.manaattributes$setMana(this.manaattributes$getMana() + amount);
 		if (amount < 0) {
-			this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayTimer();
+			this.manaRegenerationDelayTimer = this.manaattributes$getManaRegenerationDelayThreshold();
 			this.manaTickTimer = 0;
 		}
 	}
@@ -149,6 +151,16 @@ public abstract class LivingEntityMixin extends Entity implements ManaUsingEntit
 	@Override
 	public void manaattributes$setMana(float amount) {
 		DataAttachmentHelper.setMana((LivingEntity) (Object) this, (float) Mth.clamp(amount, 0.0, this.manaattributes$getUnreservedMana()));
+	}
+
+	@Override
+	public boolean manaattributes$delayManaTick() {
+		return this.delayManaTick;
+	}
+
+	@Override
+	public void manaattributes$setDelayManaTick(boolean delayManaTick) {
+		this.delayManaTick = delayManaTick;
 	}
 
 	@Override

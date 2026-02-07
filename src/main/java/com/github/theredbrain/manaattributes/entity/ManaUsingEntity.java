@@ -40,6 +40,10 @@ public interface ManaUsingEntity {
 
 	void manaattributes$setMana(float amount);
 
+	boolean manaattributes$delayManaTick();
+
+	void manaattributes$setDelayManaTick(boolean delayManaTick);
+
 	boolean manaattributes$delayMaxValueApplication();
 
 	void manaattributes$setDelayMaxValueApplication(boolean delayMaxValueApplication);
