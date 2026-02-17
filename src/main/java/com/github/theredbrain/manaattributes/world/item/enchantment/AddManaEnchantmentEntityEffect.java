@@ -1,6 +1,6 @@
 package com.github.theredbrain.manaattributes.world.item.enchantment;
 
-import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
+import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
@@ -17,8 +17,8 @@ public record AddManaEnchantmentEntityEffect(LevelBasedValue amount) implements 
 
 	@Override
 	public void apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3) {
-		if (entity instanceof StaminaUsingEntity staminaUsingEntity) {
-			staminaUsingEntity.staminaattributes$addStamina(this.amount.calculate(i));
+		if (entity instanceof ManaUsingEntity manaUsingEntity) {
+			manaUsingEntity.manaattributes$addMana(this.amount.calculate(i));
 		}
 	}
 

@@ -3,6 +3,8 @@ package com.github.theredbrain.manaattributes;
 import com.github.theredbrain.manaattributes.config.ServerConfig;
 import com.github.theredbrain.manaattributes.registry.DataAttachmentRegistry;
 import com.github.theredbrain.manaattributes.registry.EnchantmentEntityEffectRegistry;
+import com.github.theredbrain.manaattributes.world.item.enchantment.AddManaEnchantmentEntityEffect;
+import com.mojang.serialization.MapCodec;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Holder;
@@ -22,6 +24,8 @@ public class ManaAttributes implements ModInitializer {
 	public static Holder<Attribute> DEPLETED_MANA_REGENERATION_DELAY_THRESHOLD;
 	public static Holder<Attribute> MANA_TICK_THRESHOLD;
 	public static Holder<Attribute> RESERVED_MANA;
+
+	public static MapCodec<AddManaEnchantmentEntityEffect> ADD_MANA;
 
 	@Override
 	public void onInitialize() {
