@@ -19,14 +19,79 @@ When mana is <= 0, regeneration is stopped for **_depleted_mana_regeneration_del
 - **_mana_tick_threshold_**: 20
 - **_mana_regeneration_delay_threshold_**: 20
 - **_depleted_mana_regeneration_delay_threshold_**: 60
-- **_reserved_stamina_**: 0
+- **_reserved_mana_**: 0
+
+All default values for players can be set in the server config.
 
 ## Customization
 
-The server config has options to set the default value for each attribute. This only affects the attribute values for players, not other entities.
-
 The client config allows customizing the HUD element.
 
-## API
+## Using the mana system
+
+### Java
 
 Casting a "LivingEntity" to the "ManaUsingEntity" interface gives access to all relevant methods.
+
+### Data packs
+
+Mana Attributes implements several data driven methods to interact with the current mana value of an entity.
+
+- the "manaattributes:add_mana" enchantment effect allows adding a defined amount to the current mana
+- the "manaattributes:mana_using_entity" entity sub predicate passes when the current mana of an entity matches
+  the defined range
+
+#### Example
+
+This enchantment reduces mana of the attacker by 2, as long as the attacker has at least 5 mana:
+
+```json
+{
+	"anvil_cost": 1,
+	"description": {
+		"translate": "enchantment.manaattributes.test"
+	},
+	"effects": {
+		"minecraft:post_attack": [
+			{
+				"affected": "attacker",
+				"effect": {
+					"type": "manaattributes:add_mana",
+					"amount": {
+						"type": "minecraft:linear",
+						"base": -2.0,
+						"per_level_above_first": -2.0
+					}
+				},
+				"enchanted": "attacker",
+				"requirements": {
+					"condition": "minecraft:entity_properties",
+					"entity": "direct_attacker",
+					"predicate": {
+						"type_specific": {
+							"type": "manaattributes:mana_using_entity",
+							"mana_amount": {
+								"min": 5.0
+							}
+						}
+					}
+				}
+			}
+		]
+	},
+	"max_cost": {
+		"base": 25,
+		"per_level_above_first": 8
+	},
+	"max_level": 1,
+	"min_cost": {
+		"base": 5,
+		"per_level_above_first": 8
+	},
+	"slots": [
+		"hand"
+	],
+	"supported_items": "#minecraft:swords",
+	"weight": 5
+}
+```
