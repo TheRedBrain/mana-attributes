@@ -4,6 +4,7 @@
 
 - readded API methods to set and get current mana
 - added "manaattributes:add_mana" enchantment effect
+- added "manaattributes:mana_using_entity" entity sub predicate
 - the mana icon bar now blinks when mana changes, similar to the vanilla health bar. This can be disabled in the client config.
 - the mana icon bar now displays reserved mana
 
