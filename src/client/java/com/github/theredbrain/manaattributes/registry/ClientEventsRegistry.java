@@ -29,6 +29,9 @@ public class ClientEventsRegistry {
 	private static final Identifier ICON_MANA_CONTAINER_BLINKING = ManaAttributes.identifier("hud/icon_mana_container_blinking");
 	private static final Identifier ICON_MANA_FULL_BLINKING = ManaAttributes.identifier("hud/icon_mana_full_blinking");
 	private static final Identifier ICON_MANA_HALF_BLINKING = ManaAttributes.identifier("hud/icon_mana_half_blinking");
+	private static final Identifier ICON_MANA_CONTAINER_RESERVED = ManaAttributes.identifier("hud/icon_mana_container_reserved");
+	private static final Identifier ICON_MANA_FULL_RESERVED = ManaAttributes.identifier("hud/icon_mana_full_reserved");
+	private static final Identifier ICON_MANA_HALF_RESERVED = ManaAttributes.identifier("hud/icon_mana_half_reserved");
 
 	public static void initializeClientEvents() {
 		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, ManaAttributes.identifier("mana"), ((guiGraphics, delta) -> {
@@ -85,6 +88,14 @@ public class ClientEventsRegistry {
 								shouldBlink ? ICON_MANA_CONTAINER_BLINKING : ICON_MANA_CONTAINER,
 								shouldBlink ? ICON_MANA_FULL_BLINKING : ICON_MANA_FULL,
 								shouldBlink ? ICON_MANA_HALF_BLINKING : ICON_MANA_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								maxMana - unreservedMana,
+								maxMana - unreservedMana,
+								ICON_MANA_CONTAINER_RESERVED,
+								ICON_MANA_FULL_RESERVED,
+								ICON_MANA_HALF_RESERVED,
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(

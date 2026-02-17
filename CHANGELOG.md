@@ -4,11 +4,13 @@
 
 - readded API methods to set and get current mana
 - added "manaattributes:add_mana" enchantment effect
+- the mana icon bar now blinks when mana changes, similar to the vanilla health bar. This can be disabled in the client config.
+- the mana icon bar now displays reserved mana
 
 ## Fixes
 
 - fixed mana for players on respawn/joining a world
-- fixed regeneration delayW
+- fixed regeneration delay
 
 # 3.1.0
 
