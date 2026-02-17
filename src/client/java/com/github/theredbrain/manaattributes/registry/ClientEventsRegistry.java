@@ -4,6 +4,7 @@ import com.github.theredbrain.manaattributes.ManaAttributes;
 import com.github.theredbrain.manaattributes.ManaAttributesClient;
 import com.github.theredbrain.manaattributes.config.ClientConfig;
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
+import com.github.theredbrain.manaattributes.gui.hud.DuckGuiMixin;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi;
@@ -14,25 +15,56 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientEventsRegistry {
 	private static final String RESOURCE_BAR_IDENTIFIER_STRING = ManaAttributes.MOD_ID + ":mana";
 	private static final Identifier ICON_MANA_CONTAINER = ManaAttributes.identifier("hud/icon_mana_container");
 	private static final Identifier ICON_MANA_FULL = ManaAttributes.identifier("hud/icon_mana_full");
 	private static final Identifier ICON_MANA_HALF = ManaAttributes.identifier("hud/icon_mana_half");
+	private static final Identifier ICON_MANA_CONTAINER_BLINKING = ManaAttributes.identifier("hud/icon_mana_container_blinking");
+	private static final Identifier ICON_MANA_FULL_BLINKING = ManaAttributes.identifier("hud/icon_mana_full_blinking");
+	private static final Identifier ICON_MANA_HALF_BLINKING = ManaAttributes.identifier("hud/icon_mana_half_blinking");
 
 	public static void initializeClientEvents() {
-		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, ManaAttributes.identifier("mana"), ((matrixStack, delta) -> {
-			Minecraft minecraftClient = Minecraft.getInstance();
-			LocalPlayer localPlayer = minecraftClient.player;
+		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, ManaAttributes.identifier("mana"), ((guiGraphics, delta) -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			LocalPlayer localPlayer = minecraft.player;
 			ClientConfig clientConfig = ManaAttributesClient.CLIENT_CONFIG;
 
-			if (localPlayer != null && !minecraftClient.options.hideGui) {
-				double mana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMana());
-				double maxMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMaxMana());
+			if (localPlayer != null && !minecraft.options.hideGui) {
+				int mana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMana());
+
+				DuckGuiMixin gui = ((DuckGuiMixin) minecraft.gui);
+//
+				boolean shouldBlink = false;
+				int currentDisplayMana = mana;
+//
+				if (clientConfig.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.manaattributes$getManaIconBlinkTime() > gui.manaattributes$getTickCount() && (gui.manaattributes$getManaIconBlinkTime() - gui.manaattributes$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (mana < gui.manaattributes$getLastMana()) {
+						gui.manaattributes$setLastManaTime(l);
+						gui.manaattributes$setManaIconBlinkTime(gui.manaattributes$getTickCount() + 10);
+					} else if (mana > gui.manaattributes$getLastMana()) {
+						gui.manaattributes$setLastManaTime(l);
+						gui.manaattributes$setManaIconBlinkTime(gui.manaattributes$getTickCount() + 5);
+					}
+
+					if (l - gui.manaattributes$getLastManaTime() > 100L) {
+						gui.manaattributes$setDisplayMana(mana);
+						gui.manaattributes$setLastManaTime(l);
+					}
+
+					gui.manaattributes$setLastMana(mana);
+					currentDisplayMana = gui.manaattributes$getDisplayMana();
+				}
+
+				double maxMana = Math.max(Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getMaxMana()), Math.max(currentDisplayMana, mana));
 				double unreservedMana = Mth.ceil(((ManaUsingEntity) localPlayer).manaattributes$getUnreservedMana());
 
 				if (!localPlayer.isCreative() && maxMana > 0) {
@@ -42,20 +74,22 @@ public class ClientEventsRegistry {
 					int air_offset = clientConfig.dynamically_adjust_to_air_bar && localPlayer.isEyeInFluid(FluidTags.WATER) || v < u ? 10 : 0;
 					int armor_offset = clientConfig.dynamically_adjust_to_armor_bar && localPlayer.getArmorValue() > 0 ? 10 : 0;
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.origin);
 
 					if (clientConfig.mana_bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && (mana < maxMana || clientConfig.show_full_mana_bar)) {
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayMana,
+								unreservedMana,
+								shouldBlink ? ICON_MANA_CONTAINER_BLINKING : ICON_MANA_CONTAINER,
+								shouldBlink ? ICON_MANA_FULL_BLINKING : ICON_MANA_FULL,
+								shouldBlink ? ICON_MANA_HALF_BLINKING : ICON_MANA_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								RESOURCE_BAR_IDENTIFIER_STRING,
-								mana,
-								maxMana,
-								ICON_MANA_CONTAINER,
-								ICON_MANA_FULL,
-								ICON_MANA_HALF,
-								new ArrayList<>(),// TODO reserved mana
-								new ArrayList<>(),
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.iconBarSettings.offset_x.get(),
@@ -66,8 +100,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.mana_bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && (mana < maxMana || clientConfig.show_full_mana_bar)) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								RESOURCE_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -142,9 +176,9 @@ public class ClientEventsRegistry {
 					}
 					if (clientConfig.numberSettings.show_number && (mana < maxMana || clientConfig.numberSettings.show_when_mana_full)) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								RESOURCE_BAR_IDENTIFIER_STRING,
 								mana,
 								maxMana,

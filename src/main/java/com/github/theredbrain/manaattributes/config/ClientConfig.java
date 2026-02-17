@@ -39,6 +39,7 @@ public class ClientConfig extends Config {
 		public ValidatedInt offset_y = new ValidatedInt(-59);
 		public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 		public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
+		public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 	}
 
 	public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();

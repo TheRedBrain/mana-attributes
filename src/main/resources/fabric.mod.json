@@ -21,7 +21,11 @@
 		]
 	},
 	"mixins": [
-		"manaattributes.mixins.json"
+		"manaattributes.mixins.json",
+		{
+			"config": "manaattributes.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"custom": {
 		"fzzy_config": [
