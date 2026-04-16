@@ -1,3 +1,9 @@
+# 3.2.1
+
+## Fixes
+
+- fixed an issue where respawning would no longer reset mana after re-joining a world
+
 # 3.2.0
 
 ## Additions

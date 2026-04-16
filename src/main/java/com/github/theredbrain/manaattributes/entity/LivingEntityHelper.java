@@ -6,21 +6,22 @@ public class LivingEntityHelper {
 
 	public static void tick(LivingEntity livingEntity) {
 
-		if (((ManaUsingEntity) livingEntity).manaattributes$delayManaTick()) {
-			((ManaUsingEntity) livingEntity).manaattributes$setDelayManaTick(false);
-			return;
-		}
-		if (((ManaUsingEntity) livingEntity).manaattributes$delayedMaxValueApplication()) {
-			((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
-			((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(false);
-			return;
-		}
-		if (((ManaUsingEntity) livingEntity).manaattributes$delayMaxValueApplication()) {
-			((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(true);
-			((ManaUsingEntity) livingEntity).manaattributes$setDelayMaxValueApplication(false);
-			return;
-		}
 		if (!livingEntity.level().isClientSide()) {
+
+			if (((ManaUsingEntity) livingEntity).manaattributes$delayManaTick()) {
+				((ManaUsingEntity) livingEntity).manaattributes$setDelayManaTick(false);
+				return;
+			}
+			if (((ManaUsingEntity) livingEntity).manaattributes$delayMaxValueApplication()) {
+				((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(true);
+				((ManaUsingEntity) livingEntity).manaattributes$setDelayMaxValueApplication(false);
+				return;
+			}
+			if (((ManaUsingEntity) livingEntity).manaattributes$delayedMaxValueApplication()) {
+				((ManaUsingEntity) livingEntity).manaattributes$setMana(((ManaUsingEntity) livingEntity).manaattributes$getUnreservedMana());
+				((ManaUsingEntity) livingEntity).manaattributes$setDelayedMaxValueApplication(false);
+				return;
+			}
 
 			int manaTickTimer = ((ManaUsingEntity) livingEntity).manaattributes$getManaTickTimer();
 			int depletedManaRegenerationDelayTimer = ((ManaUsingEntity) livingEntity).manaattributes$getDepletedManaRegenerationDelayTimer();

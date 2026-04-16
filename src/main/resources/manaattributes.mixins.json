@@ -6,8 +6,7 @@
     "entity.LivingEntityMixin",
     "entity.attribute.AttributesMixin",
     "entity.player.PlayerMixin",
-	  "server.PlayerListMixin",
-    "server.network.ServerPlayerMixin"
+	  "server.PlayerListMixin"
   ],
   "injectors": {
     "defaultRequire": 1
